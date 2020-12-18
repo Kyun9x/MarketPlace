@@ -55,7 +55,11 @@ class NvlDetailActivity : BaseActivity() {
                 mResult.add(RowItemModel(title = getString(R.string.gia_ban), content = marketPrice?.let { StringExt.convertToMoney(it) } + "/ " + unitName, contentColor = R.color.mainColor, contentStyle = R.style.TextView_SemiBold))
             }
             mResult.add(RowItemModel(title = getString(R.string.khu_vuc2), content = supplier_address))
-            mResult.add(RowItemModel(title = getString(R.string.brand), content = brand_name))
+            trademark?.run{
+                trademark_name?.run{
+                    mResult.add(RowItemModel(title = getString(R.string.brand), content = this))
+                }
+            }
             mResult.add(RowItemModel(title = getString(R.string.nha_cung_cap), content = supplier_name))
             if(quantity > 0){
                 mResult.add(RowItemModel(title = getString(R.string.status), content = getString(R.string.conhang)))

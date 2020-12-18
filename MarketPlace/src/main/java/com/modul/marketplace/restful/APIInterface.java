@@ -1,12 +1,6 @@
 package com.modul.marketplace.restful;
 
 
-import android.text.TextUtils;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.modul.marketplace.app.ApplicationMarketPlace;
-import com.modul.marketplace.model.marketplace.AddressModel;
 import com.modul.marketplace.model.marketplace.AddressModelData;
 import com.modul.marketplace.model.marketplace.AhamoveSearchData;
 import com.modul.marketplace.model.marketplace.ArticlesCountModelData;
@@ -66,10 +60,10 @@ public interface APIInterface {
     Call<RestDmOrderOnline> apiOrderOnline(@Body DmOrderOnline json);
 
     @GET("payment/check")
-    Call<RestDmOrderOnline> apiOrderCheckPayment(@Query("companyId") String companyId,@Query("storeId") String storeId,@Query("brandId") String brandId,@Query("paymentMethod") String paymentMethod,@Query("tranId") String tranId);
+    Call<RestDmOrderOnline> apiOrderCheckPayment(@Query("companyId") String companyId, @Query("storeId") String storeId, @Query("brandId") String brandId, @Query("paymentMethod") String paymentMethod, @Query("tranId") String tranId);
 
     @GET("payment/createOrder")
-    Call<RestDmQRCode> apiZaloPaymentCreate(@Query("companyId") String companyId,@Query("storeId") String storeId,@Query("brandId") String brandId,@Query("paymentMethod") String paymentMethod,@Query("amount") Double amount,@Query("tranId") String tranId,@Query("desc") String desc);
+    Call<RestDmQRCode> apiZaloPaymentCreate(@Query("companyId") String companyId, @Query("storeId") String storeId, @Query("brandId") String brandId, @Query("paymentMethod") String paymentMethod, @Query("amount") Double amount, @Query("tranId") String tranId, @Query("desc") String desc);
 
     @POST("payment/momo/payapp")
     Call<DmCallBackMoMo> apiPaymentMoMo(@Body DmCallBackMoMo json);
@@ -81,13 +75,15 @@ public interface APIInterface {
     Call<AddressModelData> apiSCMCity(@Query("results_per_page") int results);
 
     @GET("products")
-    Call<NvlModelData> apiSCMProducts(@Query("active") int active,@Query("cityId") String cityId);
+    Call<NvlModelData> apiSCMProducts(@Query("active") int active, @Query("cityId") String cityId,
+                                           @Query("page") int page,
+    @Query("results_per_page") int results_per_page);
 
     @GET("tags")
     Call<TagsModelData> apiSCMTags();
 
     @GET("locations")
-    Call<LocationModelData> apiSCMLocation(@Query("active") int active,@Query("company_id") String companyId,@Query("brand_ids") String brand_ids,@Query("user_id") String user_id);
+    Call<LocationModelData> apiSCMLocation(@Query("active") int active, @Query("company_id") String companyId, @Query("brand_ids") String brand_ids, @Query("user_id") String user_id);
 
     @POST("locations")
     Call<LocationModelDataObject> apiSCMLocationCreate(@Body LocationModel json);
@@ -102,13 +98,17 @@ public interface APIInterface {
     Call<AddressModelData> apiSCMDistricts(@Query("city_uid") String city_uid);
 
     @GET("precincts")
-    Call<AddressModelData> apiSCMPrecincts(@Query("city_uid") String city_uid,@Query("district_uid") String district_uid);
+    Call<AddressModelData> apiSCMPrecincts(@Query("city_uid") String city_uid, @Query("district_uid") String district_uid);
 
     @POST("feedback")
     Call<FeedbackModelData> apiSCMFeedback(@Body FeedbackModel json);
 
     @GET("articles")
-    Call<ArticlesModelData> apiSCMArticles(@Query("city_uid") String city_uid,@Query("company_id") String companyId,@Query("brand_ids") String BrandId);
+    Call<ArticlesModelData> apiSCMArticles(@Query("city_uid") String city_uid,
+                                           @Query("company_id") String companyId,
+                                           @Query("brand_ids") String BrandId,
+                                           @Query("page") int page,
+                                           @Query("results_per_page") int results_per_page);
 
     @GET("articles")
     Call<ArticlesModelDataObject> apiSCMArticlesDetail(@Query("uid") String uId);
@@ -129,16 +129,16 @@ public interface APIInterface {
     Call<ArticlesModelDataObject> apiSCMArticlesEdit(@Body String json);
 
     @GET("articles/count-status")
-    Call<ArticlesCountModelData> apiSCMArticlesCount(@Query("company_id") String company_id,@Query("author_id") String author_id);
+    Call<ArticlesCountModelData> apiSCMArticlesCount(@Query("company_id") String company_id, @Query("author_id") String author_id);
 
     @POST("invoices")
     Call<NvlOnlineModelData> apiSCMInvoices(@Body NvlOnlineModel json);
 
     @GET("invoices")
-    Call<NvlOnlineModelDataList> apiSCMInvoicesHistory(@Query("company_id") String company_id,@Query("customer_id") String customer_id,@Query("page") int page,@Query("results_per_page") int results_per_page);
+    Call<NvlOnlineModelDataList> apiSCMInvoicesHistory(@Query("company_id") String company_id, @Query("customer_id") String customer_id, @Query("page") int page, @Query("results_per_page") int results_per_page);
 
     @GET("invoices")
-    Call<NvlOnlineModelData> apiSCMInvoicesHistoryDetail(@Query("company_id") String company_id,@Query("uid") String uid);
+    Call<NvlOnlineModelData> apiSCMInvoicesHistoryDetail(@Query("company_id") String company_id, @Query("uid") String uid);
 
     @GET("https://ep.ahamove.com/places/ipos/v1/autocomplete")
     Call<AhamoveSearchData> apiAhamoveSearchLocation(@Query("text") String text);

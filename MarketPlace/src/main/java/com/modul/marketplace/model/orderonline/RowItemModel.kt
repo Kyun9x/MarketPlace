@@ -9,4 +9,3 @@ data class RowItemModel(
         var contentStyle: Int? = null,
         var isOnlyTitle: Boolean? = null
 ) : Serializable
-

@@ -2,6 +2,7 @@ package com.modul.marketplace.model.orderonline
 
 import com.google.gson.annotations.SerializedName
 import com.modul.marketplace.model.marketplace.NvlImageModel
+import com.modul.marketplace.model.marketplace.TrademarkModel
 import java.io.Serializable
 
 data class DmServiceListOrigin(
@@ -43,6 +44,7 @@ data class DmServiceListOrigin(
         @SerializedName("comboId") var comboId: String? = "",
         @SerializedName("comboDesc") var comboDesc: String? = "",
         @SerializedName("amountCombo") var amountCombo: Double? = 0.0,
+        @SerializedName("trademark") var trademark: TrademarkModel? = null,
         @SerializedName("image_urls") var imageUrls: ArrayList<NvlImageModel>? = ArrayList()
 ) : Serializable {
     companion object {
@@ -66,3 +68,4 @@ data class DmServiceListOrigin(
         return price
     }
 }
+

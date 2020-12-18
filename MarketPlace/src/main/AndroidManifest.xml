@@ -113,14 +113,14 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <receiver
-            android:name="vn.zalopay.sdk.MerchantReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="vn.zalopay.sdk.ZP_ACTION" />
-                <category android:name="zlp" />
-            </intent-filter>
-        </receiver>
+<!--        <receiver-->
+<!--            android:name="vn.zalopay.sdk.MerchantReceiver"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="vn.zalopay.sdk.ZP_ACTION" />-->
+<!--                <category android:name="zlp" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ data class NvlModel(
         @SerializedName("quantity") var quantity: Int? = 0,
         @SerializedName("product_uid") var product_uid: String? = "",
         @SerializedName("product") var product: NvlModel? = null,
+        @SerializedName("trademark") var trademark: TrademarkModel?,
         @SerializedName("unit") var unit: NvlUnitModel? = NvlUnitModel(),
         @SerializedName("description") var description: String? = "",
 ) : Serializable {
@@ -25,6 +26,13 @@ data class NvlModel(
         return Gson().toJson(this)
     }
 }
+
+data class TrademarkModel(
+        @SerializedName("active") var active: Int?,
+        @SerializedName("trademark_id") var trademark_id: String?,
+        @SerializedName("trademark_name") var trademark_name: String?,
+        @SerializedName("trademark_type") var trademark_type: String?
+)
 
 data class NvlImageModel(
         @SerializedName("url") var url: String? = "",

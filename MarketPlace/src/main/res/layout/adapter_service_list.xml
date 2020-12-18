@@ -23,7 +23,6 @@
         android:textAppearance="@style/TextView.SemiBold"
         android:layout_marginLeft="@dimen/standard_margin_15"
         android:textColor="@color/black"
-        android:singleLine="true"
         android:layout_marginRight="@dimen/d_15"
         android:textSize="@dimen/font_size_15"
         app:layout_constraintEnd_toEndOf="parent"

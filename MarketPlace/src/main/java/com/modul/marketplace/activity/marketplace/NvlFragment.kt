@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -34,13 +35,19 @@ import com.modul.marketplace.restful.WSRestFull
 import com.modul.marketplace.util.Log
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
+import kotlinx.android.synthetic.main.fragment_history_order_detail.*
 import kotlinx.android.synthetic.main.fragment_nvl.*
+import kotlinx.android.synthetic.main.fragment_nvl.mRecyclerView
 import java.util.*
 
 class NvlFragment : BaseFragment() {
     private var mAdapter: ServiceListRecyleAdapter? = null
     private val mDatas = ArrayList<DmServiceListOrigin>()
     private val RC_DETAL_CALLBACK = 261
+
+    private var page = 1
+    private var isLoading = false
+    lateinit var layoutManager: LinearLayoutManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_nvl, container, false)
@@ -53,8 +60,42 @@ class NvlFragment : BaseFragment() {
                     .registerReceiver(onNotice, IntentFilter(Constants.BROADCAST.BROAD_NVL))
         }
         initAdapter()
+        initDataLoad()
         initData()
         initClick()
+    }
+
+    private fun initDataLoad() {
+        layoutManager = LinearLayoutManager(context)
+        mRecyclerView.layoutManager = layoutManager
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    val visibleItemCount: Int = layoutManager.childCount
+                    val pastVisibleItem: Int =
+                            layoutManager.findFirstCompletelyVisibleItemPosition()
+                    val total: Int? = mAdapter?.itemCount
+
+                    if (!isLoading) {
+                        if ((visibleItemCount + pastVisibleItem) > total!!) {
+                            page += 1
+                            getPage()
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    private fun getPage() {
+        isLoading = true
+        pbLoading.visibility = View.VISIBLE
+        Handler().postDelayed({
+            callServiceList(page)
+            isLoading = false
+            pbLoading.visibility = View.GONE
+        }, 500)
     }
 
     private fun initClick() {
@@ -73,7 +114,7 @@ class NvlFragment : BaseFragment() {
 
     private fun initData() {
         Utilities.sendBoardCounlyLib(context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.BROWSER_SCM_PRODUCT)
-        callServiceList()
+        callServiceList(page)
     }
 
     private fun initAdapter() {
@@ -123,10 +164,10 @@ class NvlFragment : BaseFragment() {
         }
     }
 
-    private fun callServiceList() {
+    private fun callServiceList(page: Int) {
         showProgressHub(mActivity)
         val callback: ApiRequest<NvlModelData> = ApiRequest()
-        callback.setCallBack(mApiSCM?.apiSCMProducts(1,mCartBussiness.getCartLocate().locateId),
+        callback.setCallBack(mApiSCM?.apiSCMProducts(1,mCartBussiness.getCartLocate().locateId,page,20),
                 { response ->  onResponseServiceList(response.data) }) { error ->
             onResponseServiceList(null)
             error.printStackTrace()
@@ -136,7 +177,6 @@ class NvlFragment : BaseFragment() {
 
     private fun onResponseServiceList(response: ArrayList<NvlModel>?) {
         dismissProgressHub()
-        mDatas.clear()
         response?.forEach {
             val dmServiceListOrigin = DmServiceListOrigin()
             dmServiceListOrigin.quantity = 0.0
@@ -159,6 +199,7 @@ class NvlFragment : BaseFragment() {
             dmServiceListOrigin.supplierUid = it.supplier_uid
             dmServiceListOrigin.code = it.id
             dmServiceListOrigin.brand_name = it.brand?.brand_name
+            dmServiceListOrigin.trademark = it.trademark
             mDatas.add(dmServiceListOrigin)
         }
 
@@ -224,7 +265,6 @@ class NvlFragment : BaseFragment() {
             data?.run {
                 getSerializableExtra(Constants.OBJECT)?.let {
                     val item = it as DmServiceListOrigin
-                    Log.e("datata: ", "aaa: " + Gson().toJson(item))
                     item.run {
                         mDatas.forEach {
                             if (it.productUid == productUid) {
@@ -256,21 +296,17 @@ class NvlFragment : BaseFragment() {
             if (intent.getStringExtra("value") == Constants.BROADCAST.CHANGE_ITEM) {
                 var id = intent.getStringExtra("id")
                 var quantity = intent.getDoubleExtra("quantity",0.0)
-                Log.e("broadcast:","mDatas: "+ mDatas)
-                Log.e("broadcast:","id: "+ id)
-                Log.e("broadcast:","quantity: "+ quantity)
                 mDatas.forEach { menu ->
-                    Log.e("broadcast:","menu code: "+ menu.code)
                     if(menu.code.equals(id)){
-                        Log.e("broadcast:","old quantity: "+ menu.quantity)
                         menu.quantity = quantity
-                        Log.e("broadcast:","new quantity: "+ menu.quantity)
                     }
                 }
                 refreshView()
                 mAdapter?.notifyDataSetChanged()
             } else {
-                callServiceList()
+                page = 1
+                mDatas.clear()
+                callServiceList(page)
             }
 
         }
