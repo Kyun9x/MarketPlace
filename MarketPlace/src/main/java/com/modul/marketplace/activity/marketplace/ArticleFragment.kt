@@ -24,19 +24,22 @@ import com.modul.marketplace.extension.visible
 import com.modul.marketplace.model.marketplace.ArticlesModel
 import com.modul.marketplace.model.marketplace.ArticlesModelData
 import com.modul.marketplace.restful.ApiRequest
+import com.modul.marketplace.util.PaginationListener
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
 import kotlinx.android.synthetic.main.fragment_article.*
 import kotlinx.android.synthetic.main.fragment_history_order_detail.*
+import timber.log.Timber
 import java.util.*
 
 class ArticleFragment : BaseFragment() {
     private var mAdapter: ArtilesAdapter? = null
     private val mDatas = ArrayList<ArticlesModel>()
 
-    private var page = 1
     private var isLoading = false
-    lateinit var layoutManager: LinearLayoutManager
+    private var currentPage: Int = 1
+    private var isLastPage = false
+    private val totalPage = 99
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_article, container, false)
@@ -49,32 +52,11 @@ class ArticleFragment : BaseFragment() {
                     .registerReceiver(onNotice, IntentFilter(Constants.BROADCAST.BROAD_ARTICLES))
         }
         initAdapter()
-        initDataLoad()
+
+        currentPage = 1
+        isLastPage = false
         initData()
         initClick()
-    }
-
-    private fun initDataLoad() {
-        layoutManager = LinearLayoutManager(context)
-        mRecyclerView.layoutManager = layoutManager
-        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
-                    val visibleItemCount: Int = layoutManager.childCount
-                    val pastVisibleItem: Int =
-                            layoutManager.findFirstCompletelyVisibleItemPosition()
-                    val total: Int? = mAdapter?.itemCount
-
-                    if (!isLoading) {
-                        if ((visibleItemCount + pastVisibleItem) > total!!) {
-                            page += 1
-                            getPage()
-                        }
-                    }
-                }
-            }
-        })
     }
 
     private fun initClick() {
@@ -93,22 +75,13 @@ class ArticleFragment : BaseFragment() {
 
     private fun initData() {
         Utilities.sendBoardCounlyLib(context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.BROWSER_ARTICLE)
-        callServiceList(page)
-    }
-
-    private fun getPage() {
-        isLoading = true
-        pbLoading.visibility = View.VISIBLE
-        Handler().postDelayed({
-            callServiceList(page)
-            isLoading = false
-            pbLoading.visibility = View.GONE
-        }, 500)
+        callServiceList()
     }
 
     private fun initAdapter() {
         listRecyle?.apply {
-            layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+            val llm = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+            layoutManager = llm
             mAdapter = ArtilesAdapter(context, mDatas) {
                 val bundle = Bundle()
                 bundle.putSerializable(Constants.OBJECT, it)
@@ -118,13 +91,28 @@ class ArticleFragment : BaseFragment() {
                 )
             }
             adapter = mAdapter
+            addOnScrollListener(object : PaginationListener(llm) {
+                override fun isLastPage(): Boolean {
+                    return this@ArticleFragment.isLastPage
+                }
+
+                override fun loadMoreItems() {
+                    this@ArticleFragment.isLoading = true
+                    currentPage++
+                    callServiceList()
+                }
+
+                override fun isLoading(): Boolean {
+                    return this@ArticleFragment.isLoading
+                }
+            })
         }
     }
 
-    private fun callServiceList(page: Int) {
+    private fun callServiceList() {
         showProgressHub(mActivity)
         val callback: ApiRequest<ArticlesModelData> = ApiRequest()
-        callback.setCallBack(mApiSCM?.apiSCMArticles(mCartBussiness.getCartLocate().locateId, mCartBussiness.companyId, mCartBussiness.getListBrandId(),page,20),
+        callback.setCallBack(mApiSCM?.apiSCMArticles(mCartBussiness.getCartLocate().locateId, mCartBussiness.companyId, mCartBussiness.getListBrandId(),currentPage,20),
                 { response -> onResponseServiceList(response.data) }) { error ->
             onResponseServiceList(null)
             error.printStackTrace()
@@ -134,18 +122,34 @@ class ArticleFragment : BaseFragment() {
 
     private fun onResponseServiceList(data: ArrayList<ArticlesModel>?) {
         dismissProgressHub()
-        if (data != null) {
-            mDatas.addAll(data)
-        }
+        try {
+            mLoi.gone()
+            data?.run {
+                if (currentPage != PaginationListener.PAGE_START) mAdapter?.removeLoading()
 
-        if (mLoi != null) {
-            if (mDatas.size == 0) {
-                mLoi.visible()
-            } else {
-                mLoi.gone()
+                mAdapter?.addItems(this)
+
+                if (currentPage < totalPage) {
+                    mAdapter?.addLoading()
+                } else {
+                    isLastPage = true
+                }
+                isLoading = false
+                if (size < 20) {
+                    isLastPage = true
+                    mAdapter?.removeLoading()
+                }
+                mAdapter?.notifyDataSetChanged()
+            } ?: run {
+//            mAdapter.removeLoading();
+                Timber.e("currentPage rong: " + currentPage)
+                if (currentPage == 1) {
+                    mLoi.visible()
+                }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        mAdapter?.notifyDataSetChanged()
     }
 
     override fun onDestroy() {
@@ -157,9 +161,10 @@ class ArticleFragment : BaseFragment() {
 
     var onNotice: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            page = 1
-            mDatas.clear()
-            callServiceList(page)
+            isLastPage = false
+            currentPage = 1
+            mAdapter?.clear()
+            callServiceList()
         }
     }
 

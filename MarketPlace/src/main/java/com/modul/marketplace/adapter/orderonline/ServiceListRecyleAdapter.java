@@ -23,6 +23,7 @@ public class ServiceListRecyleAdapter
     private ArrayList<DmServiceListOrigin> data;
     private LayoutInflater inflater;
     private Activity mActivity;
+    private Boolean isLoaderVisible = false;
 
 
     private ServicelistRecycleHolder.OnItemClickRycle mOnItemClickRycle;
@@ -81,4 +82,35 @@ public class ServiceListRecyleAdapter
     public int getItemViewType(int position) {
         return position;
     }
+
+    public void clear() {
+        data.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addItems(ArrayList<DmServiceListOrigin> item) {
+        data.addAll(item);
+        notifyDataSetChanged();
+    }
+
+    public void addLoading() {
+        isLoaderVisible = true;
+        data.add(new DmServiceListOrigin());
+        notifyItemInserted(data.size() - 1);
+    }
+
+    public void removeLoading() {
+        isLoaderVisible = false;
+        int position = data.size() - 1;
+        DmServiceListOrigin item = getItem(position);
+        if (item != null) {
+            data.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public DmServiceListOrigin getItem(int position) {
+        return data.get(position);
+    }
+
 }

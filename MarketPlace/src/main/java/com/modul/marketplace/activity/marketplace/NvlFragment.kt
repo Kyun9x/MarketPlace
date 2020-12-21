@@ -33,11 +33,16 @@ import com.modul.marketplace.model.orderonline.DmServiceListOrigin
 import com.modul.marketplace.restful.ApiRequest
 import com.modul.marketplace.restful.WSRestFull
 import com.modul.marketplace.util.Log
+import com.modul.marketplace.util.PaginationListener
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
+import kotlinx.android.synthetic.main.fragment_article.*
 import kotlinx.android.synthetic.main.fragment_history_order_detail.*
 import kotlinx.android.synthetic.main.fragment_nvl.*
+import kotlinx.android.synthetic.main.fragment_nvl.mLoi
 import kotlinx.android.synthetic.main.fragment_nvl.mRecyclerView
+import kotlinx.android.synthetic.main.fragment_nvl.relativeLayout_cart
+import timber.log.Timber
 import java.util.*
 
 class NvlFragment : BaseFragment() {
@@ -45,9 +50,10 @@ class NvlFragment : BaseFragment() {
     private val mDatas = ArrayList<DmServiceListOrigin>()
     private val RC_DETAL_CALLBACK = 261
 
-    private var page = 1
     private var isLoading = false
-    lateinit var layoutManager: LinearLayoutManager
+    private var currentPage: Int = 1
+    private var isLastPage = false
+    private val totalPage = 99
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_nvl, container, false)
@@ -60,42 +66,11 @@ class NvlFragment : BaseFragment() {
                     .registerReceiver(onNotice, IntentFilter(Constants.BROADCAST.BROAD_NVL))
         }
         initAdapter()
-        initDataLoad()
+
+        currentPage = 1
+        isLastPage = false
         initData()
         initClick()
-    }
-
-    private fun initDataLoad() {
-        layoutManager = LinearLayoutManager(context)
-        mRecyclerView.layoutManager = layoutManager
-        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
-                    val visibleItemCount: Int = layoutManager.childCount
-                    val pastVisibleItem: Int =
-                            layoutManager.findFirstCompletelyVisibleItemPosition()
-                    val total: Int? = mAdapter?.itemCount
-
-                    if (!isLoading) {
-                        if ((visibleItemCount + pastVisibleItem) > total!!) {
-                            page += 1
-                            getPage()
-                        }
-                    }
-                }
-            }
-        })
-    }
-
-    private fun getPage() {
-        isLoading = true
-        pbLoading.visibility = View.VISIBLE
-        Handler().postDelayed({
-            callServiceList(page)
-            isLoading = false
-            pbLoading.visibility = View.GONE
-        }, 500)
     }
 
     private fun initClick() {
@@ -114,12 +89,13 @@ class NvlFragment : BaseFragment() {
 
     private fun initData() {
         Utilities.sendBoardCounlyLib(context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.BROWSER_SCM_PRODUCT)
-        callServiceList(page)
+        callServiceList()
     }
 
     private fun initAdapter() {
         mRecyclerView?.apply {
-            layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+            val llm = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+            layoutManager = llm
             mAdapter = ServiceListRecyleAdapter(mActivity, mDatas, object : ServicelistRecycleHolder.OnItemClickRycle {
                 override fun onClickDes(dmServiceListOrigin: DmServiceListOrigin) {
                     val bundle = Bundle()
@@ -161,13 +137,28 @@ class NvlFragment : BaseFragment() {
                 }
             })
             mRecyclerView.adapter = mAdapter
+            addOnScrollListener(object : PaginationListener(llm) {
+                override fun isLastPage(): Boolean {
+                    return this@NvlFragment.isLastPage
+                }
+
+                override fun loadMoreItems() {
+                    this@NvlFragment.isLoading = true
+                    currentPage++
+                    callServiceList()
+                }
+
+                override fun isLoading(): Boolean {
+                    return this@NvlFragment.isLoading
+                }
+            })
         }
     }
 
-    private fun callServiceList(page: Int) {
+    private fun callServiceList() {
         showProgressHub(mActivity)
         val callback: ApiRequest<NvlModelData> = ApiRequest()
-        callback.setCallBack(mApiSCM?.apiSCMProducts(1,mCartBussiness.getCartLocate().locateId,page,20),
+        callback.setCallBack(mApiSCM?.apiSCMProducts(1,mCartBussiness.getCartLocate().locateId,currentPage,20),
                 { response ->  onResponseServiceList(response.data) }) { error ->
             onResponseServiceList(null)
             error.printStackTrace()
@@ -177,40 +168,58 @@ class NvlFragment : BaseFragment() {
 
     private fun onResponseServiceList(response: ArrayList<NvlModel>?) {
         dismissProgressHub()
-        response?.forEach {
-            val dmServiceListOrigin = DmServiceListOrigin()
-            dmServiceListOrigin.quantity = 0.0
-            it.image_urls?.let { imageUrl ->
-                if (imageUrl.size > 0) {
-                    imageUrl[0].url_thumb?.run {
-                        dmServiceListOrigin.image = this
+        try {
+            mLoi.gone()
+            response?.run {
+                if (currentPage != PaginationListener.PAGE_START) mAdapter?.removeLoading()
+
+                forEach {
+                    val dmServiceListOrigin = DmServiceListOrigin()
+                    dmServiceListOrigin.quantity = 0.0
+                    it.image_urls?.let { imageUrl ->
+                        if (imageUrl.size > 0) {
+                            imageUrl[0].url_thumb?.run {
+                                dmServiceListOrigin.image = this
+                            }
+                        }
                     }
+                    dmServiceListOrigin.imageUrls = it.image_urls
+                    dmServiceListOrigin.name = it.name
+                    dmServiceListOrigin.desc = it.description
+                    dmServiceListOrigin.unitPrice = it.price!!
+                    dmServiceListOrigin.marketPrice = it.price_sale!!
+                    dmServiceListOrigin.productUid = it.id
+                    dmServiceListOrigin.unitName = it.unit?.unit_name
+                    dmServiceListOrigin.supplier_address = it.supplier?.supplier_address
+                    dmServiceListOrigin.supplier_name = it.supplier?.supplier_name
+                    dmServiceListOrigin.supplierUid = it.supplier_uid
+                    dmServiceListOrigin.code = it.id
+                    dmServiceListOrigin.brand_name = it.brand?.brand_name
+                    dmServiceListOrigin.trademark = it.trademark
+                    mDatas.add(dmServiceListOrigin)
+                }
+
+                if (currentPage < totalPage) {
+                    mAdapter?.addLoading()
+                } else {
+                    isLastPage = true
+                }
+                isLoading = false
+                if (size < 20) {
+                    isLastPage = true
+                    mAdapter?.removeLoading()
+                }
+                mAdapter?.notifyDataSetChanged()
+            } ?: run {
+//            mAdapter.removeLoading();
+                Timber.e("currentPage rong: " + currentPage)
+                if (currentPage == 1) {
+                    mLoi.visible()
                 }
             }
-            dmServiceListOrigin.imageUrls = it.image_urls
-            dmServiceListOrigin.name = it.name
-            dmServiceListOrigin.desc = it.description
-            dmServiceListOrigin.unitPrice = it.price!!
-            dmServiceListOrigin.marketPrice = it.price_sale!!
-            dmServiceListOrigin.productUid = it.id
-            dmServiceListOrigin.unitName = it.unit?.unit_name
-            dmServiceListOrigin.supplier_address = it.supplier?.supplier_address
-            dmServiceListOrigin.supplier_name = it.supplier?.supplier_name
-            dmServiceListOrigin.supplierUid = it.supplier_uid
-            dmServiceListOrigin.code = it.id
-            dmServiceListOrigin.brand_name = it.brand?.brand_name
-            dmServiceListOrigin.trademark = it.trademark
-            mDatas.add(dmServiceListOrigin)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-        if (mLoi != null) {
-            if (mDatas.size == 0) {
-                mLoi.visible()
-            } else {
-                mLoi.gone()
-            }
-        }
-        mAdapter?.notifyDataSetChanged()
     }
 
     private fun checkOrderType(confirm: (() -> Unit)? = null) {
@@ -304,9 +313,10 @@ class NvlFragment : BaseFragment() {
                 refreshView()
                 mAdapter?.notifyDataSetChanged()
             } else {
-                page = 1
-                mDatas.clear()
-                callServiceList(page)
+                isLastPage = false
+                currentPage = 1
+                mAdapter?.clear()
+                callServiceList()
             }
 
         }

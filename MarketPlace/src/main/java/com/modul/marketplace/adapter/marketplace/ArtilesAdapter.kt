@@ -23,6 +23,8 @@ class ArtilesAdapter(
 ) :
         RecyclerView.Adapter<ArtilesAdapter.ViewHolder>() {
 
+    private var isLoaderVisible = false
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
                 LayoutInflater.from(parent.context).inflate(R.layout.adapter_service_list, parent, false)
@@ -61,4 +63,35 @@ class ArtilesAdapter(
             }
         }
     }
+
+    fun clear() {
+        data.clear()
+        notifyDataSetChanged()
+    }
+
+    fun addItems(item: ArrayList<ArticlesModel>) {
+        data.addAll(item)
+        notifyDataSetChanged()
+    }
+
+    fun addLoading() {
+        isLoaderVisible = true
+        data.add(ArticlesModel())
+        notifyItemInserted(data.size - 1)
+    }
+
+    fun removeLoading() {
+        isLoaderVisible = false
+        val position = data.size - 1
+        val item: ArticlesModel = getItem(position)
+        if (item != null) {
+            data.removeAt(position)
+            notifyItemRemoved(position)
+        }
+    }
+
+    fun getItem(position: Int): ArticlesModel {
+        return data[position]
+    }
+
 }
