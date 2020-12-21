@@ -312,6 +312,6 @@
     <string name="article_companyId_valid">Your account is not active in the function to create ads, please contact the operator 19004766 for support.</string>
     <string name="card_companyId_valid">Your account is not active in purchasing function yet, please contact the operator 19004766 for support</string>
     <string name="desau">After</string>
-    <string name="policy">I agree to the terms and privacy policy</string>
+    <string name="policy">Tôi đồng ý với các điều khoản và chính sách bảo mật</string>
     <string name="polilcy_valid">Xin vui lòng xem điều khoản chính sách bảo mật và bấm đồng ý trước khi tạo bài viết</string>
 </resources>
