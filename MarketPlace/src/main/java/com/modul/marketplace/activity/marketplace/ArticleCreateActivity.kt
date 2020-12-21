@@ -1,16 +1,21 @@
 package com.modul.marketplace.activity.marketplace
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextUtils
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.GridLayoutManager
-import com.android.volley.Response
 import com.asksira.bsimagepicker.BSImagePicker
 import com.bumptech.glide.Glide
 import com.modul.marketplace.R
@@ -22,16 +27,13 @@ import com.modul.marketplace.app.Constants.ArticlesStatus.SOLD
 import com.modul.marketplace.extension.*
 import com.modul.marketplace.model.marketplace.*
 import com.modul.marketplace.model.orderonline.ImageOrderModel
-import com.modul.marketplace.restful.ApiError
 import com.modul.marketplace.restful.ApiRequest
-import com.modul.marketplace.restful.WSRestFull
 import com.modul.marketplace.util.DateTimeUtil
 import com.modul.marketplace.util.Log
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
 import kotlinx.android.synthetic.main.activity_article_create.*
 import kotlinx.android.synthetic.main.include_header2.*
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -43,7 +45,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
 
     private lateinit var mAdapterImageOrder: ImageOrderAdapter
     private val mResultImageOrder: ArrayList<ImageOrderModel> = ArrayList()
-    private var areaId :String? = null
+    private var areaId: String? = null
     private var tagsList = ArrayList<String>()
     private var idArticles: String? = null
     private var articlesModel: ArticlesModel? = null
@@ -70,7 +72,12 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
             apiDetail(this)
         } ?: run {
             mCreate.text = getString(R.string.dang_tin)
+            val content = SpannableString(getString(R.string.policy))
+            content.setSpan(UnderlineSpan(), 19, 51, 0)
+            content.setSpan(ForegroundColorSpan(Color.BLUE), 19, 51, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
+            mPolicy.text = content
+            mPolicy.visible()
             mResultImageOrder.add(ImageOrderModel(img_url_thumb = null))
             mAdapterImageOrder.notifyDataSetChanged()
         }
@@ -95,8 +102,8 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
             city_uid?.run {
                 areaId = this
             }
-            listTag?.run{
-                if(size > 0) {
+            listTag?.run {
+                if (size > 0) {
                     listTag?.first()?.id?.run {
                         tagsList.add(this)
                     }
@@ -116,8 +123,8 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
             mDesc.setText(StringExt.isTextEmpty(mContent))
             mNguoiDang.setText(StringExt.isTextEmpty(mAuthor_name))
             mSdt.setText(StringExt.isTextEmpty(mAuthor_phone))
-            listTag?.run{
-                if(size > 0) {
+            listTag?.run {
+                if (size > 0) {
                     mTag.setText(StringExt.isTextEmpty(listTag?.first()?.tag_name))
                 }
             }
@@ -295,7 +302,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
         }
         var newImageChoice = ArrayList<ArticlesImageModel>()
         mResultImageOrder.forEachIndexed { index, imageOrderModel ->
-            imageOrderModel.img_url_thumb?.run{
+            imageOrderModel.img_url_thumb?.run {
                 var newArticles = ArticlesImageModel(url = imageOrderModel.img_url, url_thumb = imageOrderModel.img_url_thumb)
                 newImageChoice.add(newArticles)
             }
@@ -369,9 +376,9 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
             }
 
             popupMenu.setOnMenuItemClickListener { item: MenuItem ->
-                if(item.itemId == 0){
+                if (item.itemId == 0) {
                     areaId = null
-                }else{
+                } else {
                     areaId = data[item.itemId.minus(1)].id.toString()
                 }
                 mKhuVuc.setText(item.title.toString())
@@ -402,6 +409,12 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
             ToastUtil.makeText(this, getString(R.string.articles_sdt_valid))
             return
         }
+        if (mPolicy.visibility == View.VISIBLE) {
+            if (!mPolicy.isChecked) {
+                ToastUtil.makeText(this, getString(R.string.polilcy_valid))
+                return
+            }
+        }
 
         var expectedValue = 0.0
         if (!TextUtils.isEmpty(price.text.toString())) {
@@ -410,7 +423,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
         }
         var newImageChoice = ArrayList<ArticlesImageModel>()
         mResultImageOrder.forEachIndexed { index, imageOrderModel ->
-            imageOrderModel.img_url_thumb?.run{
+            imageOrderModel.img_url_thumb?.run {
                 var newArticles = ArticlesImageModel(url = imageOrderModel.img_url, url_thumb = imageOrderModel.img_url_thumb)
                 newImageChoice.add(newArticles)
             }
@@ -460,11 +473,11 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
     private fun createDone(data: ArticlesModel?) {
         dismissProgressHub()
         data?.run {
-            id?.run{
+            id?.run {
                 text_success.text = getString(R.string.tao_raovat_thanhcong)
                 text_success2.text = getString(R.string.create_content_articles)
                 layout_success.visible()
-            }?:run{
+            } ?: run {
                 showToast(getString(R.string.error_network2))
             }
         }
@@ -509,7 +522,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
     override fun onSingleImageSelected(uri: Uri?, tag: String?) {
         uri?.run {
             var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, this)
-            var bitmapConvert = Bitmap.createScaledBitmap(bitmap,1000, 750, true)
+            var bitmapConvert = Bitmap.createScaledBitmap(bitmap, 1000, 750, true)
 
             showProgressHub(this@ArticleCreateActivity)
 

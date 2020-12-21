@@ -13,6 +13,7 @@ data class NvlModel(
         @SerializedName("supplier") var supplier: SupplierModel? = null,
         @SerializedName("brand") var brand: BrandModel? = null,
         @SerializedName("image_thumb") var image_thumb: String? = "",
+        @SerializedName("image_url_avatar") var image_url_avatar: String? = "",
         @SerializedName("image_urls") var image_urls: ArrayList<NvlImageModel>? = ArrayList(),
         @SerializedName("quantity") var quantity: Int? = 0,
         @SerializedName("product_uid") var product_uid: String? = "",

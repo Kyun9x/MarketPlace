@@ -171,13 +171,7 @@ class NvlFragment : BaseFragment() {
                 forEach {
                     val dmServiceListOrigin = DmServiceListOrigin()
                     dmServiceListOrigin.quantity = 0.0
-                    it.image_urls?.let { imageUrl ->
-                        if (imageUrl.size > 0) {
-                            imageUrl[0].url_thumb?.run {
-                                dmServiceListOrigin.image = this
-                            }
-                        }
-                    }
+                    dmServiceListOrigin.image = it.image_url_avatar
                     dmServiceListOrigin.imageUrls = it.image_urls
                     dmServiceListOrigin.name = it.name
                     dmServiceListOrigin.desc = it.description

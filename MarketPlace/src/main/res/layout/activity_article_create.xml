@@ -44,12 +44,12 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/title"
                     android:paddingLeft="@dimen/d_12"
-                    android:textColor="@color/black"
                     android:paddingTop="@dimen/d_15"
                     android:paddingRight="@dimen/d_12"
                     android:paddingBottom="@dimen/d_15"
                     android:singleLine="true"
                     android:textAppearance="@style/EditText.SemiBold"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/font_size_14" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -193,8 +193,8 @@
                 android:layout_marginRight="@dimen/d_15"
                 android:textAppearance="@style/EditText.Regular"
                 android:textColorHint="@color/gray80"
-                app:boxStrokeColor="@color/mainColor"
                 android:visibility="gone"
+                app:boxStrokeColor="@color/mainColor"
                 app:boxStrokeWidth="0.5dp"
                 app:hintTextColor="@color/mainColor"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -261,10 +261,10 @@
                 android:layout_marginTop="@dimen/d_10"
                 android:gravity="start"
                 android:padding="@dimen/standard_margin"
-                android:textSize="@dimen/font_size_14"
                 android:text="@string/product_image"
                 android:textAppearance="@style/TextView.SemiBold"
                 android:textColor="@color/text_36"
+                android:textSize="@dimen/font_size_14"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mTIPDesc" />
@@ -280,6 +280,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/status_cancel" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/mPolicy"
+                android:layout_width="match_parent"
+                android:textSize="@dimen/font_size_14"
+                android:visibility="gone"
+                android:textAppearance="@style/TextView.Regular"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_36"
+                android:text="@string/policy"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mRecyclerViewImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
@@ -461,11 +474,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/success"
-            android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="@dimen/d_15"
             android:layout_marginRight="@dimen/d_15"
             android:layout_marginBottom="@dimen/action_bar_height"
+            android:gravity="center"
             android:text="@string/create_content_articles"
             android:textAppearance="@style/TextView.Regular"
             android:textColor="@color/white"
