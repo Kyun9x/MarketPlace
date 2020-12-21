@@ -144,6 +144,6 @@ public interface APIInterface {
     Call<AhamoveSearchData> apiAhamoveSearchLocation(@Query("text") String text);
 
     @Multipart
-    @POST("upload/image?thumb_size=100, 100")
+    @POST("upload/image?thumb_size=200, 200")
     Call<ArticlesImageModelData> apiSCMUpload(@Part MultipartBody.Part file);
 }

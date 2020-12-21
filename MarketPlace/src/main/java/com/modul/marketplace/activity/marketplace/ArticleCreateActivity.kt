@@ -1,6 +1,5 @@
 package com.modul.marketplace.activity.marketplace
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -30,8 +29,6 @@ import com.modul.marketplace.util.DateTimeUtil
 import com.modul.marketplace.util.Log
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_article_create.*
 import kotlinx.android.synthetic.main.include_header2.*
 import okhttp3.MediaType
@@ -511,19 +508,43 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
 
     override fun onSingleImageSelected(uri: Uri?, tag: String?) {
         uri?.run {
-            cropItem(this)
+            var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, this)
+            var bitmapConvert = Bitmap.createScaledBitmap(bitmap,1000, 750, true)
+
+            showProgressHub(this@ArticleCreateActivity)
+
+            val f = File(cacheDir, "image.jpg")
+            try {
+                f.createNewFile()
+                val bm = bitmapConvert
+                val bos = ByteArrayOutputStream()
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, bos)
+                val bitmapdata = bos.toByteArray()
+                var fos: FileOutputStream? = null
+                fos = FileOutputStream(f)
+                fos.write(bitmapdata)
+                fos.flush()
+                fos.close()
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+            val reqFile: RequestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), f)
+            val body: MultipartBody.Part = MultipartBody.Part.createFormData("file", f.name, reqFile)
+
+            val callback: ApiRequest<ArticlesImageModelData> = ApiRequest()
+            callback.setCallBack(mApiSCM?.apiSCMUpload(body),
+                    { response -> uploadDone(response.data) }) { error ->
+                error.printStackTrace()
+                dismissProgressHub()
+            }
         }
     }
 
     override fun onMultiImageSelected(uriList: MutableList<Uri>?, tag: String?) {
 
-    }
-
-
-
-    private fun cropItem(imageUri: Uri) {
-        CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setFixAspectRatio(true).start(this)
     }
 
     private fun uploadDone(data: UploadImageModel?) {
@@ -548,48 +569,5 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
 
     override fun loadImage(imageUri: Uri?, ivImage: ImageView?) {
         Glide.with(this).load(imageUri).into(ivImage!!)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(data)
-            if (resultCode == RESULT_OK) {
-                val resultUri = result.uri
-
-                var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, resultUri)
-                showProgressHub(this@ArticleCreateActivity)
-
-                val f = File(cacheDir, "image.jpg")
-                try {
-                    f.createNewFile()
-                    val bm = bitmap
-                    val bos = ByteArrayOutputStream()
-                    bm.compress(Bitmap.CompressFormat.JPEG, 100, bos)
-                    val bitmapdata = bos.toByteArray()
-                    var fos: FileOutputStream? = null
-                    fos = FileOutputStream(f)
-                    fos.write(bitmapdata)
-                    fos.flush()
-                    fos.close()
-                } catch (e: FileNotFoundException) {
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-
-                val reqFile: RequestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), f)
-                val body: MultipartBody.Part = MultipartBody.Part.createFormData("file", f.name, reqFile)
-
-                val callback: ApiRequest<ArticlesImageModelData> = ApiRequest()
-                callback.setCallBack(mApiSCM?.apiSCMUpload(body),
-                        { response -> uploadDone(response.data) }) { error ->
-                    error.printStackTrace()
-                    dismissProgressHub()
-                }
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result.error
-            }
-        }
     }
 }
