@@ -36,12 +36,7 @@ import com.modul.marketplace.util.Log
 import com.modul.marketplace.util.PaginationListener
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
-import kotlinx.android.synthetic.main.fragment_article.*
-import kotlinx.android.synthetic.main.fragment_history_order_detail.*
 import kotlinx.android.synthetic.main.fragment_nvl.*
-import kotlinx.android.synthetic.main.fragment_nvl.mLoi
-import kotlinx.android.synthetic.main.fragment_nvl.mRecyclerView
-import kotlinx.android.synthetic.main.fragment_nvl.relativeLayout_cart
 import timber.log.Timber
 import java.util.*
 
@@ -169,7 +164,7 @@ class NvlFragment : BaseFragment() {
     private fun onResponseServiceList(response: ArrayList<NvlModel>?) {
         dismissProgressHub()
         try {
-            mLoi.gone()
+            mLoi?.gone()
             response?.run {
                 if (currentPage != PaginationListener.PAGE_START) mAdapter?.removeLoading()
 
@@ -214,7 +209,7 @@ class NvlFragment : BaseFragment() {
 //            mAdapter.removeLoading();
                 Timber.e("currentPage rong: " + currentPage)
                 if (currentPage == 1) {
-                    mLoi.visible()
+                    mLoi?.visible()
                 }
             }
         } catch (e: Exception) {
