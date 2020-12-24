@@ -9,23 +9,19 @@ import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.widget.PopupMenu
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.android.volley.VolleyError
 import com.google.android.material.tabs.TabLayout
-import com.modul.marketplace.adapter.marketplace.MarketPlaceAdapter
-import com.modul.marketplace.model.marketplace.AddressModel
 import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseActivity
-import com.modul.marketplace.app.ApplicationMarketPlace
+import com.modul.marketplace.adapter.marketplace.MarketPlaceAdapter
 import com.modul.marketplace.app.Constants
 import com.modul.marketplace.app.Constants.BROADCAST.*
 import com.modul.marketplace.extension.*
+import com.modul.marketplace.model.marketplace.AddressModel
 import com.modul.marketplace.model.marketplace.AddressModelData
 import com.modul.marketplace.model.orderonline.DmOrderOnline
 import com.modul.marketplace.restful.ApiRequest
-import com.modul.marketplace.restful.WSRestFull
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
-import com.modul.marketplace.util.Utilities.sendBoardLib
 import kotlinx.android.synthetic.main.activity_marketplace.*
 import kotlinx.android.synthetic.main.include_header2.*
 import java.util.*
@@ -63,15 +59,15 @@ class MarketPlaceActivity : BaseActivity() {
                 when (tab.position) {
                     0 -> {
                         pagerMain.currentItem = 0
-                        Utilities.sendBoardCounlyLib(baseContext,Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.BROWSER_HERMES_PRODUCT)
+                        Utilities.sendBoardCounlyLib(baseContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.BROWSER_HERMES_PRODUCT)
                     }
                     1 -> {
                         pagerMain.currentItem = 1
-                        Utilities.sendBoardCounlyLib(baseContext,Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.BROWSER_SCM_PRODUCT)
+                        Utilities.sendBoardCounlyLib(baseContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.BROWSER_SCM_PRODUCT)
                     }
                     2 -> {
                         pagerMain.currentItem = 2
-                        Utilities.sendBoardCounlyLib(baseContext,Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.BROWSER_ARTICLE)
+                        Utilities.sendBoardCounlyLib(baseContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.BROWSER_ARTICLE)
                     }
                 }
             }
@@ -80,6 +76,7 @@ class MarketPlaceActivity : BaseActivity() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
         pagerMain.currentItem = 2
+        tab_layout.setScrollPosition(2,0f,true)
     }
 
     private fun initClick() {
@@ -160,7 +157,7 @@ class MarketPlaceActivity : BaseActivity() {
             if (title == dmCityOd.city_name) {
                 mCartBussiness.getCartLocate().locateId = dmCityOd.id
                 mCartBussiness.getCartLocate().locateName = dmCityOd.city_name
-                Utilities.sendBoardLocateLib(applicationContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.ADDLOCATE,dmCityOd.id,dmCityOd.city_name)
+                Utilities.sendBoardLocateLib(applicationContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.ADDLOCATE, dmCityOd.city_id,dmCityOd.id, dmCityOd.city_name)
             }
         }
     }
@@ -169,7 +166,7 @@ class MarketPlaceActivity : BaseActivity() {
         showProgressHub(this)
         val callback: ApiRequest<AddressModelData> = ApiRequest()
         callback.setCallBack(mApiSCM?.apiSCMCity(1000),
-                { response ->  areaDone(response.data) }) { error ->
+                { response -> areaDone(response.data) }) { error ->
             areaDone(null)
             error.printStackTrace()
             ToastUtil.makeText(this, getString(R.string.error_network2))

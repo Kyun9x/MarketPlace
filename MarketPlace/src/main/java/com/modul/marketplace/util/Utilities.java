@@ -120,10 +120,11 @@ public class Utilities {
         context.sendBroadcast(i);
     }
 
-    public static void sendBoardLocateLib(Context context, String board, String value,String locateId,String locateName) {
+    public static void sendBoardLocateLib(Context context, String board, String value,String cityId,String locateId,String locateName) {
         Intent i = new Intent();
         i.setAction(board);
         i.putExtra("value", value);
+        i.putExtra("cityId", cityId);
         i.putExtra("locateId", locateId);
         i.putExtra("locateName", locateName);
         context.sendBroadcast(i);
