@@ -10,7 +10,10 @@ import com.modul.marketplace.app.Constants
 import com.modul.marketplace.extension.StringExt
 import com.modul.marketplace.extension.showStatusBar
 import com.modul.marketplace.model.marketplace.ArticlesModel
+import com.modul.marketplace.model.marketplace.ArticlesModelDataObject
 import com.modul.marketplace.model.orderonline.RowItemModel
+import com.modul.marketplace.restful.ApiRequest
+import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
 import kotlinx.android.synthetic.main.activity_article_detail.*
 
@@ -19,6 +22,7 @@ class ArticleDetailActivity : BaseActivity() {
     private lateinit var mAdapter: RowItemAdapter
     private var mResult: ArrayList<RowItemModel> = ArrayList()
     private var dataModel: ArticlesModel? = null
+    private var idArticles: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,27 +44,46 @@ class ArticleDetailActivity : BaseActivity() {
     }
 
     private fun initExtraValue() {
-        dataModel = intent?.extras?.let {
+        idArticles = intent?.extras?.let {
             if (it.containsKey(Constants.OBJECT)) {
-                it.getSerializable(Constants.OBJECT) as ArticlesModel?
+                it.getSerializable(Constants.OBJECT) as String?
             } else {
                 null
             }
-        }?.copy()
+        }
 
-        dataModel?.run {
+        idArticles?.run{
+            apiDetail(this)
+        }
+    }
+
+    private fun apiDetail(id: String?) {
+        showProgressHub(this)
+
+        val callback: ApiRequest<ArticlesModelDataObject> = ApiRequest()
+        callback.setCallBack(mApiSCM?.apiSCMArticlesDetail(id.toString()),
+                { response -> apiDetailDone(response.data) }) { error ->
+            apiDetailDone(null)
+            error.printStackTrace()
+            ToastUtil.makeText(this, getString(R.string.error_network2))
+        }
+    }
+
+    private fun apiDetailDone(data: ArticlesModel?) {
+        data?.run{
+            dataModel = this
             mOrder.text = getString(R.string.lienhe_nguoiban) + " - " + mAuthor_phone
             mResult.add(RowItemModel(title = mTitle, isOnlyTitle = true))
             mResult.add(RowItemModel(title = getString(R.string.gia), content = mPrice.let { StringExt.convertToMoney(it) }, contentColor = R.color.mainColor, contentStyle = R.style.TextView_SemiBold))
             mResult.add(RowItemModel(title = getString(R.string.nguoi_ban), content = mAuthor_name))
             mResult.add(RowItemModel(title = getString(R.string.khu_vuc2), content = city?.city_name))
             mResult.add(RowItemModel(title = getString(R.string.description), content = mContent))
-            initMenu()
+            initMenu(this)
         }
         mAdapter.notifyDataSetChanged()
     }
 
-    private fun initMenu() {
+    private fun initMenu(dataModel: ArticlesModel?) {
         dataModel?.run {
             val imagesRes: ArrayList<String> = arrayListOf()
             mImage_urls.forEach {

@@ -83,7 +83,7 @@ class ArticleFragment : BaseFragment() {
             layoutManager = llm
             mAdapter = ArtilesAdapter(context, mDatas) {
                 val bundle = Bundle()
-                bundle.putSerializable(Constants.OBJECT, it)
+                bundle.putSerializable(Constants.OBJECT, it.id)
                 openActivity(
                         ArticleDetailActivity::class.java,
                         bundle = bundle
