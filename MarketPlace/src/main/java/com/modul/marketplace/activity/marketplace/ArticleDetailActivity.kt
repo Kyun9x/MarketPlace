@@ -70,6 +70,7 @@ class ArticleDetailActivity : BaseActivity() {
     }
 
     private fun apiDetailDone(data: ArticlesModel?) {
+        dismissProgressHub()
         data?.run{
             dataModel = this
             mOrder.text = getString(R.string.lienhe_nguoiban) + " - " + mAuthor_phone
