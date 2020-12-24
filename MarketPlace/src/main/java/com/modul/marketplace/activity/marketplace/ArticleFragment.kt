@@ -111,7 +111,7 @@ class ArticleFragment : BaseFragment() {
     private fun callServiceList() {
         showProgressHub(mActivity)
         val callback: ApiRequest<ArticlesModelData> = ApiRequest()
-        callback.setCallBack(mApiSCM?.apiSCMArticles(mCartBussiness.getCartLocate().locateId, mCartBussiness.companyId, mCartBussiness.getListBrandId(),currentPage,20),
+        callback.setCallBack(mApiSCM?.apiSCMArticles(mCartBussiness.getCartLocate().locateId, mCartBussiness.companyId, mCartBussiness.getListBrandId(),"news",mCartBussiness.userId,currentPage,20),
                 { response -> onResponseServiceList(response.data) }) { error ->
             onResponseServiceList(null)
             error.printStackTrace()

@@ -107,6 +107,8 @@ public interface APIInterface {
     Call<ArticlesModelData> apiSCMArticles(@Query("city_uid") String city_uid,
                                            @Query("company_id") String companyId,
                                            @Query("brand_ids") String BrandId,
+                                           @Query("type") String type,
+                                           @Query("author_id") String author_id,
                                            @Query("page") int page,
                                            @Query("results_per_page") int results_per_page);
 

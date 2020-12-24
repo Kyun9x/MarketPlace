@@ -79,6 +79,7 @@ class MarketPlaceActivity : BaseActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+        pagerMain.currentItem = 2
     }
 
     private fun initClick() {
