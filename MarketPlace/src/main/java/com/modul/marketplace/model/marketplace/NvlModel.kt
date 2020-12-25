@@ -33,7 +33,12 @@ data class TrademarkModel(
         @SerializedName("trademark_id") var trademark_id: String? = null,
         @SerializedName("trademark_name") var trademark_name: String? = null,
         @SerializedName("trademark_type") var trademark_type: String? = null
-): Serializable
+): Serializable{
+
+    fun toJson(): String {
+        return Gson().toJson(this)
+    }
+}
 
 data class NvlImageModel(
         @SerializedName("url") var url: String? = "",
