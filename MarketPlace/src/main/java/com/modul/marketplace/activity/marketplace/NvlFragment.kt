@@ -184,7 +184,9 @@ class NvlFragment : BaseFragment() {
                     dmServiceListOrigin.supplierUid = it.supplier_uid
                     dmServiceListOrigin.code = it.id
                     dmServiceListOrigin.brand_name = it.brand?.brand_name
-                    dmServiceListOrigin.trademark = it.trademark
+                    it.trademark?.run{
+                        dmServiceListOrigin.trademark = copy()
+                    }
                     mDatas.add(dmServiceListOrigin)
                 }
 
