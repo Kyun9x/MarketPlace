@@ -185,22 +185,23 @@ class NvlFragment : BaseFragment() {
                     dmServiceListOrigin.supplierUid = it.supplier_uid
                     dmServiceListOrigin.code = it.id
                     dmServiceListOrigin.brand_name = it.brand?.brand_name
-                    it.trademark?.run{
-                        var tradeMarkModel = TrademarkModel()
-                        trademark_name?.run{
-                            tradeMarkModel.trademark_name = this
-                        }
-                        trademark_id?.run{
-                            tradeMarkModel.trademark_id = this
-                        }
-                        trademark_type?.run{
-                            tradeMarkModel.trademark_type = this
-                        }
-                        active?.run{
-                            tradeMarkModel.active = this
-                        }
-                        dmServiceListOrigin.trademark = tradeMarkModel
-                    }
+                    dmServiceListOrigin.trademark = it.trademark
+//                    it.trademark?.run{
+//                        var tradeMarkModel = TrademarkModel()
+//                        trademark_name?.run{
+//                            tradeMarkModel.trademark_name = this
+//                        }
+//                        trademark_id?.run{
+//                            tradeMarkModel.trademark_id = this
+//                        }
+//                        trademark_type?.run{
+//                            tradeMarkModel.trademark_type = this
+//                        }
+//                        active?.run{
+//                            tradeMarkModel.active = this
+//                        }
+//                        dmServiceListOrigin.trademark = tradeMarkModel
+//                    }
                     mDatas.add(dmServiceListOrigin)
                 }
 
