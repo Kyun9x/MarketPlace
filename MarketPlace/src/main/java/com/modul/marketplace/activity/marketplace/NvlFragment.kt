@@ -29,6 +29,7 @@ import com.modul.marketplace.holder.orderonline.ServicelistRecycleHolder
 import com.modul.marketplace.model.marketplace.AddressModelData
 import com.modul.marketplace.model.marketplace.NvlModel
 import com.modul.marketplace.model.marketplace.NvlModelData
+import com.modul.marketplace.model.marketplace.TrademarkModel
 import com.modul.marketplace.model.orderonline.DmServiceListOrigin
 import com.modul.marketplace.restful.ApiRequest
 import com.modul.marketplace.restful.WSRestFull
@@ -185,7 +186,20 @@ class NvlFragment : BaseFragment() {
                     dmServiceListOrigin.code = it.id
                     dmServiceListOrigin.brand_name = it.brand?.brand_name
                     it.trademark?.run{
-                        dmServiceListOrigin.trademark = copy()
+                        var tradeMarkModel = TrademarkModel()
+                        trademark_name?.run{
+                            tradeMarkModel.trademark_name = this
+                        }
+                        trademark_id?.run{
+                            tradeMarkModel.trademark_id = this
+                        }
+                        trademark_type?.run{
+                            tradeMarkModel.trademark_type = this
+                        }
+                        active?.run{
+                            tradeMarkModel.active = this
+                        }
+                        dmServiceListOrigin.trademark = tradeMarkModel
                     }
                     mDatas.add(dmServiceListOrigin)
                 }

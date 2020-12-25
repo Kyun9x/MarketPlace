@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.widget.PopupMenu
@@ -76,7 +77,7 @@ class MarketPlaceActivity : BaseActivity() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
         pagerMain.currentItem = 2
-        tab_layout.setScrollPosition(2,0f,true)
+        Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
     }
 
     private fun initClick() {
@@ -157,7 +158,7 @@ class MarketPlaceActivity : BaseActivity() {
             if (title == dmCityOd.city_name) {
                 mCartBussiness.getCartLocate().locateId = dmCityOd.id
                 mCartBussiness.getCartLocate().locateName = dmCityOd.city_name
-                Utilities.sendBoardLocateLib(applicationContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.ADDLOCATE, dmCityOd.city_id,dmCityOd.id, dmCityOd.city_name)
+                Utilities.sendBoardLocateLib(applicationContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.ADDLOCATE, dmCityOd.city_id, dmCityOd.id, dmCityOd.city_name)
             }
         }
     }
