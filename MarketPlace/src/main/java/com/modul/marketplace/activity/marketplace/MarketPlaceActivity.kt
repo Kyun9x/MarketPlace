@@ -15,7 +15,8 @@ import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseActivity
 import com.modul.marketplace.adapter.marketplace.MarketPlaceAdapter
 import com.modul.marketplace.app.Constants
-import com.modul.marketplace.app.Constants.BROADCAST.*
+import com.modul.marketplace.app.Constants.BROADCAST.BACK
+import com.modul.marketplace.app.Constants.BROADCAST.BROAD_MAKETPLACE
 import com.modul.marketplace.extension.*
 import com.modul.marketplace.model.marketplace.AddressModel
 import com.modul.marketplace.model.marketplace.AddressModelData
@@ -36,8 +37,8 @@ class MarketPlaceActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_marketplace)
-            LocalBroadcastManager.getInstance(this)
-                    .registerReceiver(onNotice, IntentFilter(BROAD_MAKETPLACE))
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(onNotice, IntentFilter(BROAD_MAKETPLACE))
         initMenu()
         initData()
         initClick()
@@ -46,9 +47,13 @@ class MarketPlaceActivity : BaseActivity() {
 
     private fun initExtraItem() {
         val item: String? = intent.getSerializableExtra(Constants.KEY_DATA) as String?
-        item?.run{
-        pagerMain.currentItem = 2
-        Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
+        item?.run {
+            pagerMain.currentItem = 2
+            Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
+
+            var bundle = Bundle()
+            bundle.putString(Constants.OBJECT, this)
+            openActivity(ArticleDetailActivity::class.java,bundle)
         }
     }
 
@@ -143,7 +148,7 @@ class MarketPlaceActivity : BaseActivity() {
                         callbackCity(item)
                     })
                 }
-            }else{
+            } else {
                 callbackCity(item)
             }
 
@@ -152,7 +157,7 @@ class MarketPlaceActivity : BaseActivity() {
         popupMenu.show()
     }
 
-    private fun callbackCity(item: MenuItem){
+    private fun callbackCity(item: MenuItem) {
         val cityName = item.title.toString()
         mAddress.text = cityName
         selectCodeCity(cityName)
@@ -204,12 +209,12 @@ class MarketPlaceActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(onNotice)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(onNotice)
     }
 
     var onNotice: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if(intent.getStringExtra("value") == BACK){
+            if (intent.getStringExtra("value") == BACK) {
                 finish()
             }
         }

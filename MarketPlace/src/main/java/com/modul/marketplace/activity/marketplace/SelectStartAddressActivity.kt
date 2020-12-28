@@ -1,6 +1,7 @@
 package com.modul.marketplace.activity.marketplace
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
@@ -19,6 +20,7 @@ import com.modul.marketplace.restful.ApiRequest
 import com.modul.marketplace.restful.WSRestFull
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
+import kotlinx.android.synthetic.main.activity_marketplace.*
 import kotlinx.android.synthetic.main.activity_select_order_address.*
 import timber.log.Timber
 import java.util.*
@@ -33,6 +35,16 @@ class SelectStartAddressActivity : BaseActivity() {
         initData()
         initExtra()
         initClick()
+        initExtraItem()
+    }
+
+    private fun initExtraItem() {
+        val item: String? = intent.getSerializableExtra(Constants.KEY_DATA) as String?
+        item?.run {
+            var bundle = Bundle()
+            bundle.putString(Constants.OBJECT, this)
+            openActivity(ArticleDetailActivity::class.java,bundle)
+        }
     }
 
     private fun initClick() {
