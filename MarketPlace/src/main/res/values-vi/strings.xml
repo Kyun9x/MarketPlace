@@ -325,6 +325,6 @@
     <string name="article_companyId_valid">Tài khoản của bạn chưa chưa được active chức năng tạo tin rao vặt, xin vui lòng liên hệ tổng đài 19004766 để được hỗ trợ</string>
     <string name="card_companyId_valid">Tài khoản của bạn chưa chưa được active chức năng mua hàng, xin vui lòng liên hệ tổng đài 19004766 để được hỗ trợ</string>
     <string name="desau">Để sau</string>
-    <string name="policy">Tôi đồng ý với các điều khoản và chính sách bảo mật</string>
+    <string name="policy">Tôi đồng ý với thỏa thuận cung cấp và sử dụng dịch vụ trên nền tảng IPOS Marketplace</string>
     <string name="polilcy_valid">Xin vui lòng xem điều khoản chính sách bảo mật và bấm đồng ý trước khi tạo bài viết</string>
 </resources>

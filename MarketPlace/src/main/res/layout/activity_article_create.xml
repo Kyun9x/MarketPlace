@@ -284,10 +284,12 @@
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/mPolicy"
                 android:layout_width="match_parent"
-                android:textSize="@dimen/font_size_14"
                 android:visibility="gone"
+                android:textSize="@dimen/font_size_14"
                 android:textAppearance="@style/TextView.Regular"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/d_15"
+                android:layout_marginRight="@dimen/d_15"
                 android:textColor="@color/text_36"
                 android:text="@string/policy"
                 app:layout_constraintEnd_toEndOf="parent"
