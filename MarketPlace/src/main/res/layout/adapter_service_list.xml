@@ -11,6 +11,8 @@
         android:id="@+id/image"
         android:background="@drawable/icon_default"
         android:layout_width="@dimen/d_70"
+        android:cropToPadding="true"
+        android:adjustViewBounds="true"
         android:layout_height="@dimen/d_70"
         android:layout_marginLeft="@dimen/standard_margin_15"
         app:layout_constraintStart_toStartOf="parent"

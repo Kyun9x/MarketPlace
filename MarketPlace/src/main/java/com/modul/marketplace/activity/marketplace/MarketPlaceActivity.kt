@@ -41,6 +41,15 @@ class MarketPlaceActivity : BaseActivity() {
         initMenu()
         initData()
         initClick()
+        initExtraItem()
+    }
+
+    private fun initExtraItem() {
+        val item: String? = intent.getSerializableExtra(Constants.KEY_DATA) as String?
+        item?.run{
+        pagerMain.currentItem = 2
+        Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
+        }
     }
 
     private fun initMenu() {
@@ -76,8 +85,6 @@ class MarketPlaceActivity : BaseActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
-        pagerMain.currentItem = 2
-        Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
     }
 
     private fun initClick() {
