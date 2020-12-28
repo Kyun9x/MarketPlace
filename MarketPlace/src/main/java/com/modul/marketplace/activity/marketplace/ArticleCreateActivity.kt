@@ -522,7 +522,8 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
     override fun onSingleImageSelected(uri: Uri?, tag: String?) {
         uri?.run {
             var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, this)
-            var bitmapConvert = Bitmap.createScaledBitmap(bitmap, 1000, 750, true)
+            var bitmapConvert=Bitmap.createBitmap(bitmap, 0,0,1000, 750);
+//            var bitmapConvert = Bitmap.createScaledBitmap(bitmap, 1000, 750, true)
 
             showProgressHub(this@ArticleCreateActivity)
 
