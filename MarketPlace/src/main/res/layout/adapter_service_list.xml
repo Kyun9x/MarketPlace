@@ -7,16 +7,24 @@
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/standard_margin_15">
 
-    <ImageView
-        android:id="@+id/image"
-        android:background="@drawable/icon_default"
-        android:layout_width="@dimen/d_70"
-        android:cropToPadding="true"
-        android:adjustViewBounds="true"
-        android:layout_height="@dimen/d_70"
-        android:layout_marginLeft="@dimen/standard_margin_15"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/mCard"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="@dimen/standard_margin_15"
+        android:layout_width="@dimen/d_70"
+        android:layout_height="@dimen/d_70">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/d_70"
+            android:cropToPadding="true"
+            android:adjustViewBounds="true"
+            android:layout_height="@dimen/d_70"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/title"
@@ -28,7 +36,7 @@
         android:layout_marginRight="@dimen/d_15"
         android:textSize="@dimen/font_size_15"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintStart_toEndOf="@+id/mCard"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -44,7 +52,7 @@
         android:textSize="@dimen/font_size_14"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintStart_toEndOf="@+id/mCard"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <ImageView
@@ -106,7 +114,7 @@
         android:layout_marginLeft="@dimen/standard_margin_15"
         android:textColor="@color/red"
         android:textSize="@dimen/font_size_13"
-        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintStart_toEndOf="@+id/mCard"
         app:layout_constraintTop_toBottomOf="@+id/adress" />
 
     <TextView
@@ -120,7 +128,7 @@
         android:textAppearance="@style/TextView.Regular"
         android:textColor="@color/text_36"
         android:textSize="@dimen/font_size_13"
-        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintStart_toEndOf="@+id/mCard"
         app:layout_constraintTop_toBottomOf="@+id/price_origin" />
 
     <View

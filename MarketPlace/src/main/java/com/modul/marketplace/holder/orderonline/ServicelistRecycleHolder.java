@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.modul.marketplace.R;
 import com.modul.marketplace.holder.AbsRecyleHolder;
@@ -87,7 +88,9 @@ public class ServicelistRecycleHolder extends AbsRecyleHolder {
 
     private void setData(DmServiceListOrigin item) {
         this.mDmServiceListOrigin = item;
-        Glide.with(mContext).load(item.getImage()).into(mImage);
+        Glide.with(mContext).load(item.getImage()).apply(
+                new RequestOptions().placeholder(R.drawable.icon_default)
+        ).into(mImage);
 
         price_origin.setPaintFlags(price_origin.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         price_origin.setVisibility(View.GONE);

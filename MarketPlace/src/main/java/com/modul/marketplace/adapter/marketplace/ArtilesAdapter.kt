@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.modul.marketplace.R
 import com.modul.marketplace.adapter.BaseRecycleAdapter
-import com.modul.marketplace.app.ApplicationMarketPlace
 import com.modul.marketplace.extension.gone
 import com.modul.marketplace.model.marketplace.ArticlesModel
 import com.modul.marketplace.util.FormatNumberUtil
@@ -48,10 +47,14 @@ class ArtilesAdapter(
 
         fun bind(model: ArticlesModel) {
             with(model) {
+                if (mImage_urls != null && mImage_urls.size > 0) {
+                    Glide.with(context).load(mImage_urls[0].url_thumb).apply(
+                            RequestOptions().placeholder(R.drawable.icon_default).override(100, 100)
+                    ).into(image)
+                }else{
+                    Glide.with(context).load(R.drawable.icon_default).into(image)
+                }
 
-                Glide.with(context).load(mImage_urls[0].url_thumb).apply(
-                    RequestOptions().placeholder(R.drawable.icon_default).override(100, 100)
-                ).into(image)
                 total_price.text = FormatNumberUtil.formatCurrency(mPrice)
                 title.text = mTitle
                 adress.text = mContent
