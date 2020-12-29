@@ -522,7 +522,28 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
     override fun onSingleImageSelected(uri: Uri?, tag: String?) {
         uri?.run {
             var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, this)
-            var bitmapConvert=Bitmap.createBitmap(bitmap, 0,0,1000, 750);
+
+            if (bitmap.getWidth() >= bitmap.getHeight()){
+
+                bitmap = Bitmap.createBitmap(
+                        bitmap,
+                        bitmap.getWidth()/2 - bitmap.getHeight()/2,
+                        0,
+                        bitmap.getHeight(),
+                        bitmap.getHeight()
+                );
+
+            }else{
+
+                bitmap = Bitmap.createBitmap(
+                        bitmap,
+                        0,
+                        bitmap.getHeight()/2 - bitmap.getWidth()/2,
+                        bitmap.getWidth(),
+                        bitmap.getWidth()
+                );
+            }
+
 //            var bitmapConvert = Bitmap.createScaledBitmap(bitmap, 1000, 750, true)
 
             showProgressHub(this@ArticleCreateActivity)
@@ -530,7 +551,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
             val f = File(cacheDir, "image.jpg")
             try {
                 f.createNewFile()
-                val bm = bitmapConvert
+                val bm = bitmap
                 val bos = ByteArrayOutputStream()
                 bm.compress(Bitmap.CompressFormat.JPEG, 100, bos)
                 val bitmapdata = bos.toByteArray()
