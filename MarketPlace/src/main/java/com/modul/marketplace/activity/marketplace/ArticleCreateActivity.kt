@@ -236,7 +236,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
         mAnTin.setOnClickListener { apiAnTin() }
         mDaBan.setOnClickListener { apiDaBan() }
         mTaoLaiTin.setOnClickListener { apiTaoLaiTin() }
-        mPolicy.setOnClickListener { Utilities.openWeb(this,"https://iposvn.gitbook.io/suppy-chain/thoa-thuan-dich-vu/thoa-thuan-dich-vu") }
+        mLbPolicy.setOnClickListener { Utilities.openWeb(this,"https://iposvn.gitbook.io/suppy-chain/thoa-thuan-dich-vu/thoa-thuan-dich-vu") }
     }
 
     private fun apiTaoLaiTin() {

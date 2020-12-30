@@ -48,7 +48,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/include3">
 
-                <AutoCompleteTextView
+                <TextView
                     android:id="@+id/mAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package com.modul.marketplace.activity.marketplace
 
 import android.Manifest
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,6 +23,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.android.volley.VolleyError
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseActivity
 import com.modul.marketplace.activity.order_online.InformationFragment
@@ -36,6 +41,7 @@ import com.modul.marketplace.model.orderonline.DmDeliveryInfo
 import com.modul.marketplace.model.orderonline.DmLocation
 import com.modul.marketplace.restful.ApiRequest
 import com.modul.marketplace.restful.WSRestFull
+import com.modul.marketplace.util.Log
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
 import kotlinx.android.synthetic.main.activity_add_address.*
@@ -51,6 +57,7 @@ class AddAddressOrderNvlActivity : BaseActivity() {
     private var lng = 0.0
     private var localModel : LocationModel? = null
     private var suggest: MutableList<String> = ArrayList()
+    private val AUTOCOMPLETE_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +104,18 @@ class AddAddressOrderNvlActivity : BaseActivity() {
         mDistrict.setOnClickListener { choiceDistric() }
         mPhuongXa.setOnClickListener { choicePrecinct() }
         mApply.setOnClickListener { save() }
+        mAddress.setOnClickListener { openGoogleMap() }
     }
+
+    private fun openGoogleMap() {
+        val fields = listOf(Place.Field.ID, Place.Field.NAME)
+
+        // Start the autocomplete intent.
+        val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                .build(this)
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+    }
+
 
     private fun choiceCity() {
         showProgressHub(this)
@@ -309,91 +327,91 @@ class AddAddressOrderNvlActivity : BaseActivity() {
         showStatusBar(color = R.color.white, statusColor = true)
         include2.background.setTint(ContextCompat.getColor(this, R.color.white))
 
-        mAddress.addTextChangedListener(object : TextWatcher {
-
-            val handler = Handler(Looper.getMainLooper())
-            var workRunnable: Runnable = Runnable { }
-
-            override fun onTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    before: Int,
-                    count: Int
-            ) {
-
-            }
-
-            override fun beforeTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    count: Int,
-                    after: Int
-            ) {
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                handler.removeCallbacks(workRunnable)
-                workRunnable = Runnable {
-                    apiSearch(s.toString())
-                }
-                handler.postDelayed(workRunnable, 1000)
-            }
-        })
+//        mAddress.addTextChangedListener(object : TextWatcher {
+//
+//            val handler = Handler(Looper.getMainLooper())
+//            var workRunnable: Runnable = Runnable { }
+//
+//            override fun onTextChanged(
+//                    s: CharSequence,
+//                    start: Int,
+//                    before: Int,
+//                    count: Int
+//            ) {
+//
+//            }
+//
+//            override fun beforeTextChanged(
+//                    s: CharSequence,
+//                    start: Int,
+//                    count: Int,
+//                    after: Int
+//            ) {
+//            }
+//
+//            override fun afterTextChanged(s: Editable) {
+//                handler.removeCallbacks(workRunnable)
+//                workRunnable = Runnable {
+//                    apiSearch(s.toString())
+//                }
+//                handler.postDelayed(workRunnable, 1000)
+//            }
+//        })
     }
 
 
-    private fun apiSearch(value: String) {
-        val callback: ApiRequest<AhamoveSearchData> = ApiRequest()
-        callback.setCallBack(mApiSCM?.apiAhamoveSearchLocation(value),
-                { response ->  response?.run {
-                    searchCallbacK(this)
-                } }) { error ->
-            error.printStackTrace()
-            searchCallbacK(null)
-        }
-    }
+//    private fun apiSearch(value: String) {
+//        val callback: ApiRequest<AhamoveSearchData> = ApiRequest()
+//        callback.setCallBack(mApiSCM?.apiAhamoveSearchLocation(value),
+//                { response ->  response?.run {
+//                    searchCallbacK(this)
+//                } }) { error ->
+//            error.printStackTrace()
+//            searchCallbacK(null)
+//        }
+//    }
 
-    private fun searchCallbacK(data: AhamoveSearchData?) {
-        mLoading.gone()
-        suggest.clear()
-        data?.run {
-            suggest = features?.map {
-                it.properties?.name.toString()
-            } as MutableList<String>
-
-            var adapter =
-                    ArrayAdapter(this@AddAddressOrderNvlActivity, android.R.layout.simple_list_item_1, suggest)
-            mAddress.threshold = 1
-            mAddress.setAdapter(adapter)
-            mAddress.showDropDown()
-            mAddress.onItemClickListener = object : AdapterView.OnItemClickListener {
-                override fun onItemClick(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                ) {
-                    var name = adapter.getItem(position)
-                    name?.run {
-                        var featurers = getFeaturesByName(toString())
-                        //Timber.e("geometry: " + featurers?.geometry?.toJson())
-                        //Timber.e("properties: " + featurers?.properties?.toJson())
-                        var getlng = featurers?.geometry?.coordinates?.get(0).toString().toDouble()
-                        var getlat = featurers?.geometry?.coordinates?.get(1).toString().toDouble()
-
-                        lat = getlat
-                        lng = getlng
-                        mAddress.setText(toString())
-                        mAddress.clearFocus()
-                        hidenKeyboard()
-                        var latLng = LatLng(lat, lng)
-                        //Timber.e("latLng:"+latLng)
-//                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-                    }
-                }
-            }
-        }
-    }
+//    private fun searchCallbacK(data: AhamoveSearchData?) {
+//        mLoading.gone()
+//        suggest.clear()
+//        data?.run {
+//            suggest = features?.map {
+//                it.properties?.name.toString()
+//            } as MutableList<String>
+//
+//            var adapter =
+//                    ArrayAdapter(this@AddAddressOrderNvlActivity, android.R.layout.simple_list_item_1, suggest)
+//            mAddress.threshold = 1
+//            mAddress.setAdapter(adapter)
+//            mAddress.showDropDown()
+//            mAddress.onItemClickListener = object : AdapterView.OnItemClickListener {
+//                override fun onItemClick(
+//                        parent: AdapterView<*>?,
+//                        view: View?,
+//                        position: Int,
+//                        id: Long
+//                ) {
+//                    var name = adapter.getItem(position)
+//                    name?.run {
+//                        var featurers = getFeaturesByName(toString())
+//                        //Timber.e("geometry: " + featurers?.geometry?.toJson())
+//                        //Timber.e("properties: " + featurers?.properties?.toJson())
+//                        var getlng = featurers?.geometry?.coordinates?.get(0).toString().toDouble()
+//                        var getlat = featurers?.geometry?.coordinates?.get(1).toString().toDouble()
+//
+//                        lat = getlat
+//                        lng = getlng
+//                        mAddress.setText(toString())
+//                        mAddress.clearFocus()
+//                        hidenKeyboard()
+//                        var latLng = LatLng(lat, lng)
+//                        //Timber.e("latLng:"+latLng)
+////                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -405,6 +423,33 @@ class AddAddressOrderNvlActivity : BaseActivity() {
                 lng = dmLocation.longitude
                 mAddress.setText(ad)
             }
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    data?.let {
+                        val place = Autocomplete.getPlaceFromIntent(data)
+                        Log.i(TAG, "Place: ${place.name}, ${place.id}")
+                        place?.run{
+                            latLng?.run{
+                                lat = latitude
+                                lng = longitude
+                            }
+                            mAddress.setText(name)
+                        }
+                    }
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                    // TODO: Handle the error.
+                    data?.let {
+                        val status = Autocomplete.getStatusFromIntent(data)
+                        Log.i(TAG, status.statusMessage)
+                    }
+                }
+                Activity.RESULT_CANCELED -> {
+                    // The user canceled the operation.
+                }
+            }
+            return
         }
     }
 }
