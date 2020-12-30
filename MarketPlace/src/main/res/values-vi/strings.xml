@@ -318,7 +318,7 @@
     <string name="pending">Đơn hàng của bạn vừa thanh toán thành công và đang trong quá trình xử lý</string>
     <string name="received">Đơn hàng của bạn đã được tiếp nhận và đong trong quá trình xử lý</string>
     <string name="processed">Đơn hàng đã được xử lý xong và bàn giao cho bộ phận giao hàng</string>
-    <string name="shipping">Đơn hàng đang trong quá trình vận chuyển. Bạn sẽ nhận được đơn hàng dự kiến ngày % tại %@</string>
+    <string name="shipping">Đơn hàng đang trong quá trình vận chuyển. Bạn sẽ nhận được đơn hàng dự kiến ngày %1 tại %2</string>
     <string name="completed">Đơn hàng của bạn đã được hoàn thành, các sản phẩm phần mềm đã được gia hạn sử dụng, các sản phẩm phần mềm đã được kích hoạt bảo hành</string>
     <string name="canceled">Rất xin lỗi bạn chúng tôi không thể hoàn thành đơn hàng này, toàn bộ số tiền bạn đã thanh toán online(MoMo, ZaloPay...) chúng tôi sẽ hoàn trả lại cho bạn sớm nhất</string>
     <string name="toan_quoc">Toàn quốc</string>

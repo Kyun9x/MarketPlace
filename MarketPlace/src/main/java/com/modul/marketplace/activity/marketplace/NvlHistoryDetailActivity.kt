@@ -30,6 +30,7 @@ import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
 import kotlinx.android.synthetic.main.fragment_orderonline_detail.*
 import kotlinx.android.synthetic.main.include_header_order_detail.*
+import timber.log.Timber
 import java.util.*
 
 class NvlHistoryDetailActivity : BaseActivity() {
@@ -210,6 +211,7 @@ class NvlHistoryDetailActivity : BaseActivity() {
 
     var onNotice: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            Timber.e("Nvl history detail refresh")
             uId?.run{
                 api(this)
             }

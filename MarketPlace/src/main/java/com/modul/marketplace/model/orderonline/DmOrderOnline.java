@@ -225,11 +225,11 @@ public class DmOrderOnline implements Serializable {
             statusName = context.getString(R.string.processed);
         } else if (DmStatusOrder.TYPE_SHIPPING.equals(status)) {
             Calendar date = Calendar.getInstance();
-            date.set(Calendar.HOUR_OF_DAY,(date.get(Calendar.HOUR_OF_DAY) +  getDmDeliveryInfo().getEstimateShipped()));
+            date.set(Calendar.DAY_OF_MONTH,(date.get(Calendar.DAY_OF_MONTH) +  getDmDeliveryInfo().getEstimateShipped()));
             Log.e("data: ","day1: "+ new SimpleDateFormat("dd/MM/yyyy").format(date.getTime()));
             statusName = context.getString(R.string.shipping).replace("%1", "" + new SimpleDateFormat("dd/MM/yyyy").format(date.getTime()).replace("%2", getDmDeliveryInfo().getAddress()));
 
-            date.set(Calendar.HOUR_OF_DAY,(date.get(Calendar.HOUR_OF_DAY) +  40));
+            date.set(Calendar.DAY_OF_MONTH,(date.get(Calendar.DAY_OF_MONTH) +  40));
             Log.e("data: ","day2: "+ new SimpleDateFormat("dd/MM/yyyy").format(date.getTime()));
         } else if (DmStatusOrder.TYPE_COMPLETED.equals(status)) {
             statusName = context.getString(R.string.completed);
