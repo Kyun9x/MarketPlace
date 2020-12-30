@@ -73,11 +73,12 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
         } ?: run {
             mCreate.text = getString(R.string.dang_tin)
             val content = SpannableString(getString(R.string.policy))
-            content.setSpan(UnderlineSpan(), 19, 51, 0)
+            content.setSpan(UnderlineSpan(), 20, 50, 0)
             content.setSpan(ForegroundColorSpan(Color.BLUE), 19, 51, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-            mPolicy.text = content
+            mLbPolicy.text = content
             mPolicy.visible()
+            mLbPolicy.visible()
             mResultImageOrder.add(ImageOrderModel(img_url_thumb = null))
             mAdapterImageOrder.notifyDataSetChanged()
         }
@@ -235,6 +236,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
         mAnTin.setOnClickListener { apiAnTin() }
         mDaBan.setOnClickListener { apiDaBan() }
         mTaoLaiTin.setOnClickListener { apiTaoLaiTin() }
+        mPolicy.setOnClickListener { Utilities.openWeb(this,"https://iposvn.gitbook.io/suppy-chain/thoa-thuan-dich-vu/thoa-thuan-dich-vu") }
     }
 
     private fun apiTaoLaiTin() {

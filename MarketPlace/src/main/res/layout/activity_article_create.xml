@@ -111,6 +111,7 @@
                     android:drawablePadding="@dimen/d_10"
                     android:focusableInTouchMode="false"
                     android:hint="@string/khu_vuc2"
+                    android:text="@string/toan_quoc"
                     android:paddingLeft="@dimen/d_12"
                     android:paddingTop="@dimen/d_15"
                     android:paddingRight="@dimen/d_12"
@@ -281,20 +282,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/status_cancel" />
 
-            <androidx.appcompat.widget.AppCompatCheckBox
+            <CheckBox
                 android:id="@+id/mPolicy"
-                android:layout_width="match_parent"
-                android:visibility="gone"
+                android:layout_width="wrap_content"
                 android:textSize="@dimen/font_size_14"
                 android:textAppearance="@style/TextView.Regular"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/d_15"
                 android:layout_marginRight="@dimen/d_15"
                 android:textColor="@color/text_36"
-                android:text="@string/policy"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mRecyclerViewImage" />
+
+            <TextView
+                android:id="@+id/mLbPolicy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="@dimen/standard_margin"
+                android:text="@string/policy"
+                android:textAppearance="@style/TextView.Regular"
+                android:textColor="@color/text_36"
+                android:textSize="@dimen/font_size_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/mPolicy"
+                app:layout_constraintTop_toTopOf="@+id/mPolicy" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
