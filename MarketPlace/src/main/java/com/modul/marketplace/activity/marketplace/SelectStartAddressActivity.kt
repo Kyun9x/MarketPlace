@@ -41,9 +41,12 @@ class SelectStartAddressActivity : BaseActivity() {
     private fun initExtraItem() {
         val item: String? = intent.getSerializableExtra(Constants.KEY_DATA) as String?
         item?.run {
-            var bundle = Bundle()
-            bundle.putString(Constants.OBJECT, this)
-            openActivity(ArticleDetailActivity::class.java,bundle)
+
+            Handler().postDelayed({
+                var bundle = Bundle()
+                bundle.putString(Constants.OBJECT, this)
+                openActivity(ArticleDetailActivity::class.java,bundle)
+            },1000)
         }
     }
 

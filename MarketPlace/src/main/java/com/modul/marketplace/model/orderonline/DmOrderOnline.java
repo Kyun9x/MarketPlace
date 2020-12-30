@@ -5,9 +5,12 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.modul.marketplace.R;
+import com.modul.marketplace.util.Log;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DmOrderOnline implements Serializable {
 
@@ -221,7 +224,13 @@ public class DmOrderOnline implements Serializable {
         } else if (DmStatusOrder.TYPE_PROCESSED.equals(status)) {
             statusName = context.getString(R.string.processed);
         } else if (DmStatusOrder.TYPE_SHIPPING.equals(status)) {
-            statusName = context.getString(R.string.shipping).replace("%", "" + getDmDeliveryInfo().getEstimateShipped()).replace("%@", getDmDeliveryInfo().getAddress());
+            Calendar date = Calendar.getInstance();
+            date.set(Calendar.HOUR_OF_DAY,(date.get(Calendar.HOUR_OF_DAY) +  getDmDeliveryInfo().getEstimateShipped()));
+            Log.e("data: ","day1: "+ new SimpleDateFormat("dd/MM/yyyy").format(date.getTime()));
+            statusName = context.getString(R.string.shipping).replace("%1", "" + new SimpleDateFormat("dd/MM/yyyy").format(date.getTime()).replace("%2", getDmDeliveryInfo().getAddress()));
+
+            date.set(Calendar.HOUR_OF_DAY,(date.get(Calendar.HOUR_OF_DAY) +  40));
+            Log.e("data: ","day2: "+ new SimpleDateFormat("dd/MM/yyyy").format(date.getTime()));
         } else if (DmStatusOrder.TYPE_COMPLETED.equals(status)) {
             statusName = context.getString(R.string.completed);
         } else if (DmStatusOrder.TYPE_CANCELED.equals(status)) {

@@ -27,7 +27,7 @@ public class DmDeliveryInfo implements Serializable {
     private String locationUid;
 
     @SerializedName("estimateShipped")
-    private String estimateShipped;
+    private Integer estimateShipped;
 
     @SerializedName("note")
     private String note;
@@ -70,11 +70,11 @@ public class DmDeliveryInfo implements Serializable {
         this.lat = lat;
     }
 
-    public String getEstimateShipped() {
+    public Integer getEstimateShipped() {
         return estimateShipped;
     }
 
-    public void setEstimateShipped(String estimateShipped) {
+    public void setEstimateShipped(Integer estimateShipped) {
         this.estimateShipped = estimateShipped;
     }
 

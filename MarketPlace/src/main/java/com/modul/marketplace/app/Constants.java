@@ -203,6 +203,8 @@ public class Constants {
         public static final String CHANGE_ITEM = "CHANGE_ITEM";
         public static final String BROAD_CART = "BROAD_CART";
         public static final String BROAD_INFOMATION = "BROAD_INFOMATION";
+        public static final String BROAD_MARKET_ORDER_HERMES = "BROAD_MARKET_ORDER_HERMES";
+        public static final String BROAD_MARKET_ORDER_SCM = "BROAD_MARKET_ORDER_SCM";
         public static final String BROAD_MAKETPLACE = "BROAD_MAKETPLACE";
         public static final String BACK = "BACK";
         public static final String REFRESH = "REFRESH";

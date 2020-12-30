@@ -1,7 +1,10 @@
 package com.modul.marketplace.activity.order_online;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -19,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -55,6 +59,7 @@ import java.util.Map;
 import vn.momo.momo_partner.AppMoMoLib;
 
 import static com.modul.marketplace.app.Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK;
+import static com.modul.marketplace.app.Constants.BROADCAST.BROAD_MARKET_ORDER_HERMES;
 import static com.modul.marketplace.app.Constants.BROADCAST.HERMES_ORDER_CALLBACK;
 import static com.modul.marketplace.app.Constants.BROADCAST.HERMES_ORDER_ZALO_CALLBACK;
 import static com.modul.marketplace.app.Constants.BROADCAST.REFRESH;
@@ -83,6 +88,7 @@ public class OrderDetailFragment extends BaseFragment {
     private TextView taxCode;
     private TextView adressBussiness;
     private RecyclerView mListDetail;
+    private SwipeRefreshLayout mSwipRefreshLayout;
     private ArrayList<DmService> details = new ArrayList<>();
     private OrderDetailRecyleAdapter mAdapter;
     private TextView mPayment;
@@ -157,12 +163,14 @@ public class OrderDetailFragment extends BaseFragment {
         mZalo = v.findViewById(R.id.zalopay);
         mMomo = v.findViewById(R.id.momo);
         mPaymentmethod = v.findViewById(R.id.mPaymentmethod);
+        mSwipRefreshLayout = v.findViewById(R.id.mSwipRefreshLayout);
         return v;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mActivity.registerReceiver(onNotice, new IntentFilter(BROAD_MARKET_ORDER_HERMES));
         initAdapterStatus();
         initAdapter();
         initData();
@@ -207,6 +215,15 @@ public class OrderDetailFragment extends BaseFragment {
                 choicePaymentmethod();
             }
         });
+        mSwipRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!TextUtils.isEmpty(orderCode)) {
+                    getOrderDetail(orderCode);
+                }
+            }
+        });
+
 //        CompoundButton.OnCheckedChangeListener listenerRadio
 //                = (compoundButton, b) -> {
 //            if (b) {
@@ -344,7 +361,9 @@ public class OrderDetailFragment extends BaseFragment {
     }
 
     private void getOrderDetail(String orderCode) {
-        showProgressHub(mActivity);
+        if(mSwipRefreshLayout != null){
+            mSwipRefreshLayout.setRefreshing(true);
+        }
 
         ApiRequest<RestDmOrderOnline> callback = new ApiRequest<>();
         callback.setCallBack(mApiHermes.apiOrderHistory(orderCode),
@@ -358,7 +377,9 @@ public class OrderDetailFragment extends BaseFragment {
     }
 
     private void onResponseOrderDetail(DmOrderOnline dmOrderOnline) {
-        dismissProgressHub();
+        if(mSwipRefreshLayout != null){
+            mSwipRefreshLayout.setRefreshing(false);
+        }
         if (dmOrderOnline != null) {
             mDmOrderOnline = dmOrderOnline;
             loadDataStatus();
@@ -426,9 +447,9 @@ public class OrderDetailFragment extends BaseFragment {
             infoPhone.setText(dmDeliveryInfo.getReceiverPhone());
             mAdress.setText(dmDeliveryInfo.getAddress());
             mCustomerNote.setText(dmOrderOnline.getCustomerNote());
-            if (!TextUtils.isEmpty(dmDeliveryInfo.getEstimateShipped())) {
+            if (dmDeliveryInfo.getEstimateShipped() != null) {
 //                mLayoutNoteInven.setVisibility(View.VISIBLE);
-                mEstimateTime.setText(dmDeliveryInfo.getEstimateShipped() + " " + getString(R.string.date));
+                mEstimateTime.setText(""+dmDeliveryInfo.getEstimateShipped() + " " + getString(R.string.date));
                 mInvenNote.setText(dmDeliveryInfo.getNote());
             } else {
 //                mLayoutNoteInven.setVisibility(View.GONE);
@@ -616,4 +637,19 @@ public class OrderDetailFragment extends BaseFragment {
             getOrderDetail(orderCode);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+       mActivity.unregisterReceiver(onNotice);
+    }
+
+    private final BroadcastReceiver onNotice = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!TextUtils.isEmpty(orderCode)) {
+                getOrderDetail(orderCode);
+            }
+        }
+    };
 }

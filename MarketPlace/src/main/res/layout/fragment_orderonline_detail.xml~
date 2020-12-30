@@ -11,15 +11,10 @@
         android:id="@+id/include2"
         layout="@layout/include_header_order_detail" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/mSwipRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/include2"
-        android:layout_height="match_parent">
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/include2"
         android:background="@color/white"
         android:orientation="vertical">
 
@@ -651,8 +646,6 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <RelativeLayout
         android:id="@+id/layout_success"

@@ -51,9 +51,11 @@ class MarketPlaceActivity : BaseActivity() {
             pagerMain.currentItem = 2
             Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
 
-            var bundle = Bundle()
-            bundle.putString(Constants.OBJECT, this)
-            openActivity(ArticleDetailActivity::class.java,bundle)
+            Handler().postDelayed({
+                var bundle = Bundle()
+                bundle.putString(Constants.OBJECT, this)
+                openActivity(ArticleDetailActivity::class.java,bundle)
+            },1000)
         }
     }
 

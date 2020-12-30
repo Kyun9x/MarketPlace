@@ -1,8 +1,12 @@
 package com.modul.marketplace.activity.marketplace
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.VolleyError
@@ -43,6 +47,7 @@ class NvlHistoryDetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_orderonline_detail)
+        registerReceiver(onNotice, IntentFilter(BROADCAST.BROAD_MARKET_ORDER_SCM))
         initExtra()
         initAdapter()
         initData()
@@ -72,7 +77,9 @@ class NvlHistoryDetailActivity : BaseActivity() {
     }
 
     private fun api(uId: String) {
-        showProgressHub(this)
+        mSwipRefreshLayout?.apply {
+            isRefreshing = true
+        }
         val callback: ApiRequest<NvlOnlineModelData> = ApiRequest()
         callback.setCallBack(mApiSCM?.apiSCMInvoicesHistoryDetail(mCartBussiness.companyId, uId),
                 { response ->  apiDone(response.data) }) { error ->
@@ -83,7 +90,9 @@ class NvlHistoryDetailActivity : BaseActivity() {
     }
 
     private fun apiDone(data: NvlOnlineModel?) {
-        dismissProgressHub()
+        mSwipRefreshLayout?.apply {
+            isRefreshing = false
+        }
         data?.run{
             loadDataStatus(this)
             header_text.text = resources.getString(R.string.don_hang) + " #" + invoice_id
@@ -168,6 +177,11 @@ class NvlHistoryDetailActivity : BaseActivity() {
 
     private fun initClick() {
         back.setOnClickListener {onBackPressed()}
+        mSwipRefreshLayout.setOnRefreshListener {
+            uId?.run{
+                api(this)
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -187,5 +201,18 @@ class NvlHistoryDetailActivity : BaseActivity() {
 
     private fun initData() {
         showStatusBar(color = R.color.grayF8, statusColor = true)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(onNotice)
+    }
+
+    var onNotice: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            uId?.run{
+                api(this)
+            }
+        }
     }
 }

@@ -305,7 +305,7 @@
     <string name="pending">Your order has been paid successfully and is in the process of being processed</string>
     <string name="received">Your order has been received and measured during processing</string>
     <string name="processed">Your order has been processed and handed over to the delivery department</string>
-    <string name="shipping">Your order is in the shipping process. You will receive your order expected to date % at %@</string>
+    <string name="shipping">Your order is in the shipping process. You will receive your order expected to date %1 at %2</string>
     <string name="completed">Your order has been completed, software products have been extended, software products have been warranted.</string>
     <string name="canceled">Sorry we cannot complete this order, the full amount you have paid online (MoMo, ZaloPay ...) we will refund you soon.</string>
     <string name="toan_quoc">Nationwide</string>
