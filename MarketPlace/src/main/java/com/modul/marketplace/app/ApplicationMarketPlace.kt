@@ -42,7 +42,7 @@ class ApplicationMarketPlace : Application() {
 
     private val applicationMarketPlace: ApplicationMarketPlace? = null
 
-    fun initContext(c: Context){
+    fun initContext(c: Context) {
         context = c
     }
 
@@ -65,7 +65,7 @@ class ApplicationMarketPlace : Application() {
 
     fun AddLink(scm_link: String? = null, scm_access_token: String? = null, scm_secret_key: String? = null, hermes_link: String? = null, hermes_access_token: String? = null,
                 appType: String? = null,
-                countryUid: String? = null){
+                countryUid: String? = null) {
         scm_link?.run {
             SCM_LINK = this
         }
@@ -106,9 +106,7 @@ class ApplicationMarketPlace : Application() {
         locationBussiness = LocationBussiness(context)
         cartBussiness = CartBussiness()
         FormatNumberUtil.initInStance()
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyD0sFPVfdoH05Ty-soynyOIpE9MsmV1XqI", Locale.US);
-        }
+        Places.initialize(this, "AIzaSyD0sFPVfdoH05Ty-soynyOIpE9MsmV1XqI", Locale.US);
 //        Countly.applicationOnCreate()
 //        val config = CountlyConfig(
 //                context,
