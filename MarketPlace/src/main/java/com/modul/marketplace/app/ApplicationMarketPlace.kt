@@ -13,6 +13,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.VolleyLog
 import com.android.volley.toolbox.Volley
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.google.android.libraries.places.api.Places
 import com.google.firebase.FirebaseApp
 import com.modul.marketplace.bussiness.CartBussiness
 import com.modul.marketplace.bussiness.LocationBussiness
@@ -23,6 +24,7 @@ import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
 import vn.momo.momo_partner.AppMoMoLib
+import java.util.*
 
 //import vn.zalopay.sdk.ZaloPaySDK
 
@@ -104,6 +106,9 @@ class ApplicationMarketPlace : Application() {
         locationBussiness = LocationBussiness(context)
         cartBussiness = CartBussiness()
         FormatNumberUtil.initInStance()
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), "AIzaSyD0sFPVfdoH05Ty-soynyOIpE9MsmV1XqI", Locale.US);
+        }
 //        Countly.applicationOnCreate()
 //        val config = CountlyConfig(
 //                context,
