@@ -1,6 +1,7 @@
 package com.modul.marketplace.activity.order_online
 
 import android.Manifest
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,6 +15,10 @@ import android.view.MenuItem
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseActivity
 import com.modul.marketplace.app.Constants
@@ -23,6 +28,7 @@ import com.modul.marketplace.extension.showStatusBar
 import com.modul.marketplace.model.orderonline.*
 import com.modul.marketplace.paser.orderonline.RestAllDmLocate
 import com.modul.marketplace.restful.ApiRequest
+import com.modul.marketplace.util.Log
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
 import kotlinx.android.synthetic.main.activity_add_address.*
@@ -39,6 +45,7 @@ class AddAddressOrderOnlineActivity : BaseActivity() {
     private var lat = 0.0
     private var lng = 0.0
     private var suggest: MutableList<String> = ArrayList()
+    private val AUTOCOMPLETE_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +61,16 @@ class AddAddressOrderOnlineActivity : BaseActivity() {
         mDistrict.setOnClickListener { district() }
         mPhuongXa.setOnClickListener { phuongxa() }
         mApply.setOnClickListener { save() }
+        mAddress.setOnClickListener { openGoogleMap() }
+    }
+
+    private fun openGoogleMap() {
+        val fields = listOf(Place.Field.ID, Place.Field.NAME)
+
+        // Start the autocomplete intent.
+        val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                .build(this)
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }
 
     private fun save() {
@@ -318,6 +335,33 @@ class AddAddressOrderOnlineActivity : BaseActivity() {
                 lng = dmLocation.longitude
                 mAddress.setText(ad)
             }
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    data?.let {
+                        val place = Autocomplete.getPlaceFromIntent(data)
+                        Log.i(TAG, "Place: ${place.name}, ${place.id}")
+                        place?.run{
+                            latLng?.run{
+                                lat = latitude
+                                lng = longitude
+                            }
+                            mAddress.setText(name)
+                        }
+                    }
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                    // TODO: Handle the error.
+                    data?.let {
+                        val status = Autocomplete.getStatusFromIntent(data)
+                        Log.i(TAG, status.statusMessage)
+                    }
+                }
+                Activity.RESULT_CANCELED -> {
+                    // The user canceled the operation.
+                }
+            }
+            return
         }
     }
 }
