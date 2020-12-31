@@ -106,7 +106,7 @@ class ApplicationMarketPlace : Application() {
         locationBussiness = LocationBussiness(context)
         cartBussiness = CartBussiness()
         FormatNumberUtil.initInStance()
-        Places.initialize(this, "AIzaSyD0sFPVfdoH05Ty-soynyOIpE9MsmV1XqI", Locale.US);
+        Places.initialize(context, "AIzaSyD0sFPVfdoH05Ty-soynyOIpE9MsmV1XqI", Locale.US);
 //        Countly.applicationOnCreate()
 //        val config = CountlyConfig(
 //                context,
