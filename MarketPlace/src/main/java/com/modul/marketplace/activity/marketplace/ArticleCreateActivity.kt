@@ -204,7 +204,9 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
         mRecyclerViewImage.apply {
             layoutManager = GridLayoutManager(this@ArticleCreateActivity, 3)
             mAdapterImageOrder = ImageOrderAdapter(mResultImageOrder, itemClickListener = { it, potision ->
-                openSelectImage()
+                if(idArticles == null) {
+                    openSelectImage()
+                }
             }, deleteClickListener = {
                 mResultImageOrder.remove(it)
                 mAdapterImageOrder.notifyDataSetChanged()

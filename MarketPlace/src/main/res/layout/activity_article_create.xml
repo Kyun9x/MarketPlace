@@ -289,6 +289,7 @@
                 android:textAppearance="@style/TextView.Regular"
                 android:gravity="center"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/d_15"
                 android:textColor="@color/text_36"
                 app:layout_constraintStart_toStartOf="parent"
@@ -297,6 +298,7 @@
             <TextView
                 android:id="@+id/mLbPolicy"
                 android:layout_width="0dp"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/d_15"
                 android:gravity="start"
