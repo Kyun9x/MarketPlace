@@ -298,6 +298,10 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
             ToastUtil.makeText(this, getString(R.string.articles_sdt_valid))
             return
         }
+        if (TextUtils.isEmpty(mDesc.text.toString())) {
+            ToastUtil.makeText(this, getString(R.string.decs_valid))
+            return
+        }
 
         var expectedValue = 0.0
         if (!TextUtils.isEmpty(price.text.toString())) {
@@ -411,6 +415,10 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
         }
         if (TextUtils.isEmpty(mSdt.text.toString())) {
             ToastUtil.makeText(this, getString(R.string.articles_sdt_valid))
+            return
+        }
+        if (TextUtils.isEmpty(mDesc.text.toString())) {
+            ToastUtil.makeText(this, getString(R.string.decs_valid))
             return
         }
         if (mPolicy.visibility == View.VISIBLE) {
