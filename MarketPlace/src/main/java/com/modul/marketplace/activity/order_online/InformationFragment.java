@@ -301,11 +301,11 @@ public class InformationFragment extends BaseFragment {
         if (mCartBussiness.getOrder().getOrderType() == Constants.OrderType.OrderNvl) {
             mZalo.setVisibility(View.GONE);
             mMomo.setVisibility(View.GONE);
-            mCash.setSelected(true);
+            mCash.setChecked(true);
             typePayment = DmOrderOnline.COD;
         } else {
             mCash.setVisibility(View.GONE);
-            mMomo.setSelected(true);
+            mMomo.setChecked(true);
             typePayment = DmOrderOnline.MOMO;
         }
         validAmountCart();
