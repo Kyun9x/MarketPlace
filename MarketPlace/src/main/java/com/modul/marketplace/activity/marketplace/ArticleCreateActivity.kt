@@ -242,24 +242,24 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
     }
 
     private fun apiTaoLaiTin() {
-        var newArticlesModel = ArticlesModel(id = articlesModel?.id, type = "renew")
+        var newArticlesModel = ArticlesModel(id = articlesModel?.id, type = "renew", mPrice = null)
         apiEdit(newArticlesModel)
         Utilities.sendBoardCounlyLib(baseContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.RENEW_ARTICLE)
     }
 
     private fun apiHuyTin() {
-        var newArticlesModel = ArticlesModel(id = articlesModel?.id, status = CANCELED)
+        var newArticlesModel = ArticlesModel(id = articlesModel?.id, status = CANCELED, mPrice = null)
         apiEdit(newArticlesModel)
         Utilities.sendBoardCounlyLib(baseContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.CANCLE_ARTICLE)
     }
 
     private fun apiAnTin() {
         if (articlesModel?.active == 0) {
-            var newArticlesModel = ArticlesModel(id = articlesModel?.id, active = 1)
+            var newArticlesModel = ArticlesModel(id = articlesModel?.id, active = 1, mPrice = null)
             apiEdit(newArticlesModel)
             Utilities.sendBoardCounlyLib(baseContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.ACTIVE_ARTICLE)
         } else {
-            var newArticlesModel = ArticlesModel(id = articlesModel?.id, active = 0)
+            var newArticlesModel = ArticlesModel(id = articlesModel?.id, active = 0, mPrice = null)
             apiEdit(newArticlesModel)
             Utilities.sendBoardCounlyLib(baseContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.DEACTIVE_ARTICLE)
         }
@@ -267,7 +267,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
 
     private fun apiDaBan() {
         Utilities.sendBoardCounlyLib(baseContext, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.MARK_SOLD_ARTICLE)
-        var newArticlesModel = ArticlesModel(id = articlesModel?.id, status = SOLD)
+        var newArticlesModel = ArticlesModel(id = articlesModel?.id, status = SOLD, mPrice = null)
         apiEdit(newArticlesModel)
     }
 

@@ -452,12 +452,16 @@ public class InformationFragment extends BaseFragment {
     private void onReponseOrderOnline(DmOrderOnline dmOrderOnline) {
         dismissProgressHub();
         if (dmOrderOnline != null) {
-            mCartBussiness.setOder(dmOrderOnline);
-            if (DmOrderOnline.ZALOPAY.equals(typePayment)) {
-                apiZaloPaymentCreate(dmOrderOnline);
-            } else {
-                tranID = dmOrderOnline.getOrderCode();
-                requestPaymentMoMo(tranID, dmOrderOnline.getOrderCode(), (int) dmOrderOnline.getAmount());
+            if(dmOrderOnline.getAmount() == 0.0){
+                mLayoutSuccess.setVisibility(View.VISIBLE);
+            }else {
+                mCartBussiness.setOder(dmOrderOnline);
+                if (DmOrderOnline.ZALOPAY.equals(typePayment)) {
+                    apiZaloPaymentCreate(dmOrderOnline);
+                } else {
+                    tranID = dmOrderOnline.getOrderCode();
+                    requestPaymentMoMo(tranID, dmOrderOnline.getOrderCode(), (int) dmOrderOnline.getAmount());
+                }
             }
         }
     }

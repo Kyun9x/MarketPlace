@@ -99,7 +99,7 @@ object StringExt {
         return regex.matcher(text).find()
     }
 
-    fun convertToMoney(value: Double): String {
+    fun convertToMoney(value: Double?): String {
         if (value != null) {
             val mNumberFormat = NumberFormat.getNumberInstance(FormatNumberUtil.getLocale())
             mDecimalNormal = mNumberFormat as DecimalFormat?

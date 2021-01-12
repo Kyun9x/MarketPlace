@@ -75,7 +75,7 @@ class ArticleDetailActivity : BaseActivity() {
             dataModel = this
             mOrder.text = getString(R.string.lienhe_nguoiban) + " - " + mAuthor_phone
             mResult.add(RowItemModel(title = mTitle, isOnlyTitle = true))
-            mResult.add(RowItemModel(title = getString(R.string.gia), content = mPrice.let { StringExt.convertToMoney(it) }, contentColor = R.color.mainColor, contentStyle = R.style.TextView_SemiBold))
+            mResult.add(RowItemModel(title = getString(R.string.gia), content = mPrice?.let { StringExt.convertToMoney(it) }, contentColor = R.color.mainColor, contentStyle = R.style.TextView_SemiBold))
             mResult.add(RowItemModel(title = getString(R.string.nguoi_ban), content = mAuthor_name))
             mResult.add(RowItemModel(title = getString(R.string.khu_vuc2), content = city?.city_name))
             mResult.add(RowItemModel(title = getString(R.string.description), content = mContent))
