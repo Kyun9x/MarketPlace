@@ -227,7 +227,7 @@ public class DmOrderOnline implements Serializable {
             Calendar date = Calendar.getInstance();
             date.set(Calendar.DAY_OF_MONTH,(date.get(Calendar.DAY_OF_MONTH) +  getDmDeliveryInfo().getEstimateShipped()));
             Log.e("data: ","day1: "+ new SimpleDateFormat("dd/MM/yyyy").format(date.getTime()));
-            statusName = context.getString(R.string.shipping).replace("%1", "" + new SimpleDateFormat("dd/MM/yyyy").format(date.getTime()).replace("%2", getDmDeliveryInfo().getAddress()));
+            statusName = context.getString(R.string.shipping).replace("%1", "" + new SimpleDateFormat("dd/MM/yyyy").format(date.getTime())).replace("%2", getDmDeliveryInfo().getAddress());
 
             date.set(Calendar.DAY_OF_MONTH,(date.get(Calendar.DAY_OF_MONTH) +  40));
             Log.e("data: ","day2: "+ new SimpleDateFormat("dd/MM/yyyy").format(date.getTime()));
