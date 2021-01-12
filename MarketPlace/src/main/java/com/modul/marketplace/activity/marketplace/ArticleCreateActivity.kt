@@ -401,10 +401,6 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
             ToastUtil.makeText(this, getString(R.string.articles_title_valid))
             return
         }
-        if (TextUtils.isEmpty(price.text.toString())) {
-            ToastUtil.makeText(this, getString(R.string.articles_price_valid))
-            return
-        }
         if (TextUtils.isEmpty(mKhuVuc.text.toString())) {
             ToastUtil.makeText(this, getString(R.string.articles_khuvuc_valid))
             return
@@ -474,7 +470,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
     private fun apiEdit(articlesModel: ArticlesModel) {
         showProgressHub(this)
         val callback: ApiRequest<ArticlesModelDataObject> = ApiRequest()
-        callback.setCallBack(mApiSCM?.apiSCMArticlesEdit(articlesModel.toJson()),
+        callback.setCallBack(mApiSCM?.apiSCMArticlesEdit(articlesModel),
                 { response -> editDone(response.data) }) { error ->
             editDone(null)
             error.printStackTrace()

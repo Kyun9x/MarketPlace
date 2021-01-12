@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/mLb" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputLayout"
+        android:id="@+id/inputLayoutSDT"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -62,6 +62,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mRating">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/mSDT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:hint="@string/phone_number"
+            android:inputType="numberDecimal"
+            android:paddingLeft="@dimen/d_12"
+            android:paddingTop="@dimen/d_15"
+            android:paddingRight="@dimen/d_12"
+            android:paddingBottom="@dimen/d_15"
+            android:textAppearance="@style/EditText.Regular"
+            android:textSize="@dimen/font_size_17" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/d_15"
+        android:layout_marginTop="@dimen/d_15"
+        android:layout_marginRight="@dimen/d_15"
+        android:textColorHint="@color/gray80"
+        app:boxStrokeColor="@color/mainColor"
+        app:boxStrokeWidth="0.5dp"
+        app:hintTextColor="@color/mainColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutSDT">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/mNote"

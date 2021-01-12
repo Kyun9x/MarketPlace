@@ -128,7 +128,7 @@ public interface APIInterface {
     Call<ArticlesModelDataObject> apiSCMArticlesCreate(@Body ArticlesModel json);
 
     @PUT("articles")
-    Call<ArticlesModelDataObject> apiSCMArticlesEdit(@Body String json);
+    Call<ArticlesModelDataObject> apiSCMArticlesEdit(@Body ArticlesModel json);
 
     @GET("articles/count-status")
     Call<ArticlesCountModelData> apiSCMArticlesCount(@Query("company_id") String company_id, @Query("author_id") String author_id);

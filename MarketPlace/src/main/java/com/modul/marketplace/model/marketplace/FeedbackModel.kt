@@ -7,6 +7,9 @@ import java.io.Serializable
 data class FeedbackModel(
         @SerializedName("feedback_title") var feedback_title: String? = "",
         @SerializedName("feedback_content") var feedback_content: String? = "",
+        @SerializedName("company_id") var company_id : String? = "",
+        @SerializedName("brand_id") var brand_id : String? = "",
+        @SerializedName("customer_email") var customer_email : String? = "",
         @SerializedName("customer_phone") var customer_phone: String? = "",
         @SerializedName("customer_name") var customer_name: String? = ""
 ) : Serializable {

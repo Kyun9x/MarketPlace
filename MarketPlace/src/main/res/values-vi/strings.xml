@@ -328,5 +328,6 @@
     <string name="policy">Tôi đồng ý với thỏa thuận cung cấp và sử dụng dịch vụ trên nền tảng IPOS Marketplace</string>
     <string name="polilcy_valid">Xin vui lòng xem điều khoản chính sách bảo mật và bấm đồng ý trước khi tạo bài viết</string>
     <string name="decs_valid">Chưa nhập mô tả</string>
+    <string name="thoa_thuan">Thỏa thuận</string>
 
 </resources>

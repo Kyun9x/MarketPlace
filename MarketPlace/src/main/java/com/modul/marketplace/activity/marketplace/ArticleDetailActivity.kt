@@ -72,10 +72,16 @@ class ArticleDetailActivity : BaseActivity() {
     private fun apiDetailDone(data: ArticlesModel?) {
         dismissProgressHub()
         data?.run{
+            var textPriceConvert =""
+            if(mPrice == 0.0){
+                textPriceConvert = getString(R.string.thoa_thuan)
+            }else{
+                textPriceConvert = StringExt.convertToMoney(mPrice)
+            }
             dataModel = this
             mOrder.text = getString(R.string.lienhe_nguoiban) + " - " + mAuthor_phone
             mResult.add(RowItemModel(title = mTitle, isOnlyTitle = true))
-            mResult.add(RowItemModel(title = getString(R.string.gia), content = mPrice?.let { StringExt.convertToMoney(it) }, contentColor = R.color.mainColor, contentStyle = R.style.TextView_SemiBold))
+            mResult.add(RowItemModel(title = getString(R.string.gia), content = textPriceConvert, contentColor = R.color.mainColor, contentStyle = R.style.TextView_SemiBold))
             mResult.add(RowItemModel(title = getString(R.string.nguoi_ban), content = mAuthor_name))
             mResult.add(RowItemModel(title = getString(R.string.khu_vuc2), content = city?.city_name))
             mResult.add(RowItemModel(title = getString(R.string.description), content = mContent))

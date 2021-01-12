@@ -453,6 +453,7 @@ public class InformationFragment extends BaseFragment {
         dismissProgressHub();
         if (dmOrderOnline != null) {
             if(dmOrderOnline.getAmount() == 0.0){
+                mCartBussiness.getOrder().setOrderCode(dmOrderOnline.getOrderCode());
                 mLayoutSuccess.setVisibility(View.VISIBLE);
             }else {
                 mCartBussiness.setOder(dmOrderOnline);
