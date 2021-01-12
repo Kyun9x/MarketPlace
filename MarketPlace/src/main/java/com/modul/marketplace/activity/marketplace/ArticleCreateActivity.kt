@@ -111,7 +111,7 @@ class ArticleCreateActivity : BaseActivity(), BSImagePicker.OnSingleImageSelecte
                 }
             }
 
-            mImage_urls.forEach {
+            mImage_urls?.forEach {
                 var imageOrderModel = ImageOrderModel()
                 imageOrderModel.img_url = it.url
                 imageOrderModel.img_url_thumb = it.url_thumb

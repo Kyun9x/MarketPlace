@@ -87,7 +87,7 @@ class ArticleDetailActivity : BaseActivity() {
     private fun initMenu(dataModel: ArticlesModel?) {
         dataModel?.run {
             val imagesRes: ArrayList<String> = arrayListOf()
-            mImage_urls.forEach {
+            mImage_urls?.forEach {
                 it.url?.run {
                     imagesRes.add(this)
                 }

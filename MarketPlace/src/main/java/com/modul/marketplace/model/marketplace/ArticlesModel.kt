@@ -6,7 +6,7 @@ import java.io.Serializable
 
 data class ArticlesModel(
         @SerializedName("id") var id: String? = null,
-        @SerializedName("image_urls") var mImage_urls: ArrayList<ArticlesImageModel> = ArrayList(),
+        @SerializedName("image_urls") var mImage_urls: ArrayList<ArticlesImageModel>? = null,
         @SerializedName("title") var mTitle: String? = null,
         @SerializedName("status") var status: String? = null,
         @SerializedName("active") var active: Int? = null,
@@ -19,8 +19,8 @@ data class ArticlesModel(
         @SerializedName("author_name") var mAuthor_name: String? =null,
         @SerializedName("author_phone") var mAuthor_phone: String? = null,
         @SerializedName("city_uid") var city_uid: String? = null,
-        @SerializedName("tags_uid") var tags_uid: ArrayList<String>? = ArrayList(),
-        @SerializedName("tags") var listTag: ArrayList<TagsModel>? = ArrayList(),
+        @SerializedName("tags_uid") var tags_uid: ArrayList<String>? = null,
+        @SerializedName("tags") var listTag: ArrayList<TagsModel>? = null,
         @SerializedName("brand_id") var brand_id: String? =null,
         @SerializedName("company_id") var company_id: String? = null,
         @SerializedName("dateName") var dateName: String? = null,

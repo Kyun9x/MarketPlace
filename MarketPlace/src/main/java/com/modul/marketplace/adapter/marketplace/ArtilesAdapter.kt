@@ -47,8 +47,8 @@ class ArtilesAdapter(
 
         fun bind(model: ArticlesModel) {
             with(model) {
-                if (mImage_urls != null && mImage_urls.size > 0) {
-                    Glide.with(context).load(mImage_urls[0].url_thumb).apply(
+                if (mImage_urls != null && mImage_urls?.size!! > 0) {
+                    Glide.with(context).load(mImage_urls!![0].url_thumb).apply(
                             RequestOptions().placeholder(R.drawable.icon_default).override(100, 100)
                     ).into(image)
                 }else{

@@ -51,7 +51,11 @@ class MyArticlesListAdapter(
                 dateName?.let{
                     mTime.text = it
                 }
-                initAvatarCompany(context,mImage,mImage_urls[0]?.url_thumb.toString(),mContext.getDrawable(R.drawable.icon_default))
+                if(mImage_urls != null && mImage_urls?.size!! > 0){
+                    initAvatarCompany(context,mImage,mImage_urls!![0].url_thumb.toString(),mContext.getDrawable(R.drawable.icon_default))
+                }else{
+                    initAvatarCompany(context,mImage,"",mContext.getDrawable(R.drawable.icon_default))
+                }
 
                 convertView.setOnClickListener {
                     itemClickListener(this)
