@@ -135,8 +135,10 @@ class MarketPlaceActivity : BaseActivity() {
     }
 
     private fun onResponseServiceList(data: ArrayList<DmServiceListOrigin>?, id: String) {
+        showToast("id: "+ id)
         data?.forEach {
             if (it.uId.equals(id)) {
+                        showToast("Co data: "+ it.name)
                 Handler().postDelayed({
                     val bundle = Bundle()
                     bundle.putSerializable(Constants.OBJECT, it)
