@@ -11,8 +11,6 @@ import android.view.MenuItem
 import androidx.appcompat.widget.PopupMenu
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.tabs.TabLayout
-import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseActivity
 import com.modul.marketplace.activity.order_online.PurchaseDetailActivity
@@ -63,7 +61,7 @@ class MarketPlaceActivity : BaseActivity() {
         item?.run {
             Timber.e("item: " + toJson())
             Timber.e("notify_type: " + notify_type)
-            if(notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
+            if (notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
                 Timber.e("notify_type: " + notify_type)
                 pagerMain.currentItem = 2
                 Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
@@ -73,35 +71,35 @@ class MarketPlaceActivity : BaseActivity() {
                     bundle.putString(Constants.OBJECT, partner_notify_id)
                     openActivity(ArticleDetailActivity::class.java, bundle)
                 }, 1000)
-            }else if(notify_type == Constants.NotifyStatus.PRODUCT){
-                notify_detail?.run{
+            } else if (notify_type == Constants.NotifyStatus.PRODUCT) {
+                notify_detail?.run {
                     Timber.e("notify_detail: " + toJson())
-                    product_type?.run{
+                    product_type?.run {
                         Timber.e("product_type: " + product_type)
-                        if(this == HERMES){
+                        if (this == HERMES) {
                             pagerMain.currentItem = 0
                             Handler().postDelayed({ tab_layout.getTabAt(0)?.select() }, 100)
-                            product_id?.run{
+                            product_id?.run {
                                 Timber.e("product_id: " + this)
                                 apiMenuHermes(this)
                             }
-                        }else{
+                        } else {
                             pagerMain.currentItem = 1
                             Handler().postDelayed({ tab_layout.getTabAt(1)?.select() }, 100)
-                            product_id?.run{
+                            product_id?.run {
                                 Timber.e("product_id: " + this)
                                 apiMenuNvl(this)
                             }
                         }
                     }
                 }
-            }else{
+            } else {
 
             }
         }
     }
 
-    private fun apiMenuNvl(id: String){
+    private fun apiMenuNvl(id: String) {
         val callback: ApiRequest<NvlModelData> = ApiRequest()
         callback.setCallBack(mApiSCM?.apiSCMProducts(1, mCartBussiness.getCartLocate().locateId, 1, 999),
                 { response -> onResponseServiceListNvl(response.data, id) }) { error ->
@@ -110,18 +108,19 @@ class MarketPlaceActivity : BaseActivity() {
     }
 
     private fun onResponseServiceListNvl(data: ArrayList<NvlModel>?, id: String) {
-        data?.run{
-            forEach {
-                if(it.id == id){
+        data?.forEach {
+            if (it.id.equals(id)) {
+                Handler().postDelayed({
                     val bundle = Bundle()
                     bundle.putSerializable(Constants.OBJECT, it)
                     openActivity(NvlDetailActivity::class.java, bundle = bundle)
-                }
+                }, 1000)
+
             }
         }
     }
 
-    private fun apiMenuHermes(id: String){
+    private fun apiMenuHermes(id: String) {
         var productType = ""
         if (mCartBussiness.appType == Constants.FABI) {
             productType = Constants.FABI
@@ -136,14 +135,13 @@ class MarketPlaceActivity : BaseActivity() {
     }
 
     private fun onResponseServiceList(data: ArrayList<DmServiceListOrigin>?, id: String) {
-        data?.run{
-            forEach {
-                Timber.e("uId: " + it.uId)
-                if(it.uId == id){
+        data?.forEach {
+            if (it.uId.equals(id)) {
+                Handler().postDelayed({
                     val bundle = Bundle()
                     bundle.putSerializable(Constants.OBJECT, it)
                     openActivity(PurchaseDetailActivity::class.java, bundle = bundle)
-                }
+                }, 1000)
             }
         }
     }
