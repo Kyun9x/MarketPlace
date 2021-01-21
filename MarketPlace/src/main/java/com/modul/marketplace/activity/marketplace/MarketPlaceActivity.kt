@@ -29,6 +29,7 @@ import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
 import kotlinx.android.synthetic.main.activity_marketplace.*
 import kotlinx.android.synthetic.main.include_header2.*
+import timber.log.Timber
 import java.util.*
 
 
@@ -52,6 +53,7 @@ class MarketPlaceActivity : BaseActivity() {
         val item: NotificationModel? = intent.getSerializableExtra(Constants.KEY_DATA) as NotificationModel?
         item?.run {
             if(notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
+                Timber.e("notify_type: "+ notify_type)
                 pagerMain.currentItem = 2
                 Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
 
@@ -61,18 +63,23 @@ class MarketPlaceActivity : BaseActivity() {
                     openActivity(ArticleDetailActivity::class.java,bundle)
                 },1000)
             }else if(notify_type == Constants.NotifyStatus.PRODUCT){
+                Timber.e("notify_type: "+ notify_type)
                 notify_detail?.run{
+                    Timber.e("notify_detail: "+ toJson())
                     product_type?.run{
+                        Timber.e("product_type: "+ product_type)
                         if(this == HERMES){
                             pagerMain.currentItem = 0
                             Handler().postDelayed({ tab_layout.getTabAt(0)?.select() }, 100)
                             product_id?.run{
+                                Timber.e("product_id: "+ this)
                                 apiMenuHermes(this)
                             }
                         }else{
                             pagerMain.currentItem = 1
                             Handler().postDelayed({ tab_layout.getTabAt(1)?.select() }, 100)
                             product_id?.run{
+                                Timber.e("product_id: "+ this)
                                 apiMenuNvl(this)
                             }
                         }
@@ -121,12 +128,11 @@ class MarketPlaceActivity : BaseActivity() {
     private fun onResponseServiceList(data: ArrayList<DmServiceListOrigin>?, id : String) {
         data?.run{
             forEach {
+                Timber.e("uId: " +it.uId)
                 if(it.uId == id){
                     val bundle = Bundle()
                     bundle.putSerializable(Constants.OBJECT, it)
-                    openActivity(
-                            PurchaseDetailActivity::class.java ,bundle = bundle
-                    )
+                    openActivity(PurchaseDetailActivity::class.java ,bundle = bundle)
                 }
             }
         }
