@@ -103,9 +103,26 @@ class MarketPlaceActivity : BaseActivity() {
     private fun onResponseServiceListNvl(data: ArrayList<NvlModel>?, id: String) {
         data?.forEach {
             if (it.id.equals(id)) {
+                val dmServiceListOrigin = DmServiceListOrigin()
+                dmServiceListOrigin.quantity = 0.0
+                dmServiceListOrigin.image = it.image_url_avatar
+                dmServiceListOrigin.imageUrls = it.image_urls
+                dmServiceListOrigin.name = it.name
+                dmServiceListOrigin.desc = it.description
+                dmServiceListOrigin.unitPrice = it.price!!
+                dmServiceListOrigin.marketPrice = it.price_sale!!
+                dmServiceListOrigin.productUid = it.id
+                dmServiceListOrigin.unitName = it.unit?.unit_name
+                dmServiceListOrigin.supplier_address = it.supplier?.supplier_address
+                dmServiceListOrigin.supplier_name = it.supplier?.supplier_name
+                dmServiceListOrigin.supplierUid = it.supplier_uid
+                dmServiceListOrigin.code = it.id
+                dmServiceListOrigin.brand_name = it.brand?.brand_name
+                dmServiceListOrigin.trademark = it.trademark
+
                 Handler().postDelayed({
                     val bundle = Bundle()
-                    bundle.putSerializable(Constants.OBJECT, it)
+                    bundle.putSerializable(Constants.OBJECT, dmServiceListOrigin)
                     openActivity(NvlDetailActivity::class.java, bundle = bundle)
                 }, 1000)
 
