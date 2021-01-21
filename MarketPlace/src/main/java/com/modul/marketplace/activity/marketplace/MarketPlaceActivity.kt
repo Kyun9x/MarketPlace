@@ -11,6 +11,8 @@ import android.view.MenuItem
 import androidx.appcompat.widget.PopupMenu
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.tabs.TabLayout
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseActivity
 import com.modul.marketplace.activity.order_online.PurchaseDetailActivity
@@ -52,42 +54,43 @@ class MarketPlaceActivity : BaseActivity() {
     private fun initExtraItem() {
         var item = intent?.extras?.let {
             if (it.containsKey(Constants.KEY_DATA)) {
-                it.getSerializable(Constants.KEY_DATA) as NotificationModel?
+                it.getString(Constants.KEY_DATA)
             } else {
                 null
             }
-        }?.copy()
+        }
 
-        item?.run {
-            Timber.e("item: "+ toJson())
-            Timber.e("notify_type: "+ notify_type)
+        var notifiModel = Gson().fromJson(item, NotificationModel::class.java)
+        notifiModel?.run {
+            Timber.e("item: " + toJson())
+            Timber.e("notify_type: " + notify_type)
             if(notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
-                Timber.e("notify_type: "+ notify_type)
+                Timber.e("notify_type: " + notify_type)
                 pagerMain.currentItem = 2
                 Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
 
                 Handler().postDelayed({
                     var bundle = Bundle()
                     bundle.putString(Constants.OBJECT, partner_notify_id)
-                    openActivity(ArticleDetailActivity::class.java,bundle)
-                },1000)
+                    openActivity(ArticleDetailActivity::class.java, bundle)
+                }, 1000)
             }else if(notify_type == Constants.NotifyStatus.PRODUCT){
                 notify_detail?.run{
-                    Timber.e("notify_detail: "+ toJson())
+                    Timber.e("notify_detail: " + toJson())
                     product_type?.run{
-                        Timber.e("product_type: "+ product_type)
+                        Timber.e("product_type: " + product_type)
                         if(this == HERMES){
                             pagerMain.currentItem = 0
                             Handler().postDelayed({ tab_layout.getTabAt(0)?.select() }, 100)
                             product_id?.run{
-                                Timber.e("product_id: "+ this)
+                                Timber.e("product_id: " + this)
                                 apiMenuHermes(this)
                             }
                         }else{
                             pagerMain.currentItem = 1
                             Handler().postDelayed({ tab_layout.getTabAt(1)?.select() }, 100)
                             product_id?.run{
-                                Timber.e("product_id: "+ this)
+                                Timber.e("product_id: " + this)
                                 apiMenuNvl(this)
                             }
                         }
@@ -99,10 +102,10 @@ class MarketPlaceActivity : BaseActivity() {
         }
     }
 
-    private fun apiMenuNvl(id : String){
+    private fun apiMenuNvl(id: String){
         val callback: ApiRequest<NvlModelData> = ApiRequest()
-        callback.setCallBack(mApiSCM?.apiSCMProducts(1,mCartBussiness.getCartLocate().locateId,1,999),
-                { response ->  onResponseServiceListNvl(response.data,id) }) { error ->
+        callback.setCallBack(mApiSCM?.apiSCMProducts(1, mCartBussiness.getCartLocate().locateId, 1, 999),
+                { response -> onResponseServiceListNvl(response.data, id) }) { error ->
             error.printStackTrace()
         }
     }
@@ -113,13 +116,13 @@ class MarketPlaceActivity : BaseActivity() {
                 if(it.id == id){
                     val bundle = Bundle()
                     bundle.putSerializable(Constants.OBJECT, it)
-                    openActivity(NvlDetailActivity::class.java ,bundle = bundle)
+                    openActivity(NvlDetailActivity::class.java, bundle = bundle)
                 }
             }
         }
     }
 
-    private fun apiMenuHermes(id : String){
+    private fun apiMenuHermes(id: String){
         var productType = ""
         if (mCartBussiness.appType == Constants.FABI) {
             productType = Constants.FABI
@@ -129,18 +132,18 @@ class MarketPlaceActivity : BaseActivity() {
 
         val callback: ApiRequest<RestAllDmServiceListOrigin> = ApiRequest()
         callback.setCallBack(mApiHermes?.apiOrderOnline_ServiceList(productType),
-                { response ->  onResponseServiceList(response.data,id) }) { error ->
+                { response -> onResponseServiceList(response.data, id) }) { error ->
         }
     }
 
-    private fun onResponseServiceList(data: ArrayList<DmServiceListOrigin>?, id : String) {
+    private fun onResponseServiceList(data: ArrayList<DmServiceListOrigin>?, id: String) {
         data?.run{
             forEach {
-                Timber.e("uId: " +it.uId)
+                Timber.e("uId: " + it.uId)
                 if(it.uId == id){
                     val bundle = Bundle()
                     bundle.putSerializable(Constants.OBJECT, it)
-                    openActivity(PurchaseDetailActivity::class.java ,bundle = bundle)
+                    openActivity(PurchaseDetailActivity::class.java, bundle = bundle)
                 }
             }
         }
