@@ -50,8 +50,17 @@ class MarketPlaceActivity : BaseActivity() {
     }
 
     private fun initExtraItem() {
-        val item: NotificationModel? = intent.getSerializableExtra(Constants.KEY_DATA) as NotificationModel?
+        var item = intent?.extras?.let {
+            if (it.containsKey(Constants.KEY_DATA)) {
+                it.getSerializable(Constants.KEY_DATA) as NotificationModel?
+            } else {
+                null
+            }
+        }?.copy()
+
         item?.run {
+            Timber.e("item: "+ toJson())
+            Timber.e("notify_type: "+ notify_type)
             if(notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
                 Timber.e("notify_type: "+ notify_type)
                 pagerMain.currentItem = 2
@@ -63,7 +72,6 @@ class MarketPlaceActivity : BaseActivity() {
                     openActivity(ArticleDetailActivity::class.java,bundle)
                 },1000)
             }else if(notify_type == Constants.NotifyStatus.PRODUCT){
-                Timber.e("notify_type: "+ notify_type)
                 notify_detail?.run{
                     Timber.e("notify_detail: "+ toJson())
                     product_type?.run{

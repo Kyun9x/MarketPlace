@@ -42,9 +42,15 @@ class SelectStartAddressActivity : BaseActivity() {
     }
 
     private fun initExtraItem() {
-        val item: NotificationModel? = intent.getSerializableExtra(Constants.KEY_DATA) as NotificationModel?
-        item?.run {
+        var item = intent?.extras?.let {
+            if (it.containsKey(Constants.KEY_DATA)) {
+                it.getSerializable(Constants.KEY_DATA) as NotificationModel?
+            } else {
+                null
+            }
+        }?.copy()
 
+        item?.run {
             if(notify_type == SCM_ARTICLE) {
                 Handler().postDelayed({
                     var bundle = Bundle()
