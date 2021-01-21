@@ -58,8 +58,9 @@ class MarketPlaceActivity : BaseActivity() {
             } else {
                 null
             }
-        }
-
+        }.toString()
+        Timber.e("item: " + item)
+        
         var notifiModel = Gson().fromJson(item, NotificationModel::class.java)
         notifiModel?.run {
             Timber.e("item: " + toJson())
