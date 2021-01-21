@@ -54,15 +54,13 @@ class MarketPlaceActivity : BaseActivity() {
     private fun initExtraItem() {
         var item = intent?.extras?.let {
             if (it.containsKey(Constants.KEY_DATA)) {
-                it.getString(Constants.KEY_DATA)
+                it.getSerializable(Constants.KEY_DATA) as NotificationModel
             } else {
                 null
             }
-        }.toString()
-        Timber.e("item: " + item)
-        
-        var notifiModel = Gson().fromJson(item, NotificationModel::class.java)
-        notifiModel?.run {
+        }
+
+        item?.run {
             Timber.e("item: " + toJson())
             Timber.e("notify_type: " + notify_type)
             if(notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
