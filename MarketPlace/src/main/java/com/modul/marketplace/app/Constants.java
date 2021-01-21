@@ -176,6 +176,10 @@ public class Constants {
         public static final String CONFIRMED = "CONFIRMED";
     }
 
+    public static class Product {
+        public static final String HERMES = "HERMES";
+    }
+
     public static class ArticlesStatus {
         public static final String CONFIRMED = "CONFIRMED";
         public static final String PENDING = "PENDING";
@@ -188,6 +192,7 @@ public class Constants {
 
     public static class NotifyStatus {
         public static final String SCM_ARTICLE = "SCM_ARTICLE";
+        public static final String PRODUCT = "PRODUCT";
         public static final String survey = "survey";
         public static final String campaign = "campaign";
     }

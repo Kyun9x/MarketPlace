@@ -13,14 +13,17 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.tabs.TabLayout
 import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseActivity
+import com.modul.marketplace.activity.order_online.PurchaseDetailActivity
 import com.modul.marketplace.adapter.marketplace.MarketPlaceAdapter
 import com.modul.marketplace.app.Constants
 import com.modul.marketplace.app.Constants.BROADCAST.BACK
 import com.modul.marketplace.app.Constants.BROADCAST.BROAD_MAKETPLACE
+import com.modul.marketplace.app.Constants.Product.HERMES
 import com.modul.marketplace.extension.*
-import com.modul.marketplace.model.marketplace.AddressModel
-import com.modul.marketplace.model.marketplace.AddressModelData
+import com.modul.marketplace.model.marketplace.*
 import com.modul.marketplace.model.orderonline.DmOrderOnline
+import com.modul.marketplace.model.orderonline.DmServiceListOrigin
+import com.modul.marketplace.paser.orderonline.RestAllDmServiceListOrigin
 import com.modul.marketplace.restful.ApiRequest
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
@@ -46,16 +49,86 @@ class MarketPlaceActivity : BaseActivity() {
     }
 
     private fun initExtraItem() {
-        val item: String? = intent.getSerializableExtra(Constants.KEY_DATA) as String?
+        val item: NotificationModel? = intent.getSerializableExtra(Constants.KEY_DATA) as NotificationModel?
         item?.run {
-            pagerMain.currentItem = 2
-            Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
+            if(notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
+                pagerMain.currentItem = 2
+                Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
 
-            Handler().postDelayed({
-                var bundle = Bundle()
-                bundle.putString(Constants.OBJECT, this)
-                openActivity(ArticleDetailActivity::class.java,bundle)
-            },1000)
+                Handler().postDelayed({
+                    var bundle = Bundle()
+                    bundle.putString(Constants.OBJECT, partner_notify_id)
+                    openActivity(ArticleDetailActivity::class.java,bundle)
+                },1000)
+            }else if(notify_type == Constants.NotifyStatus.PRODUCT){
+                notify_detail?.run{
+                    product_type?.run{
+                        if(this == HERMES){
+                            pagerMain.currentItem = 0
+                            Handler().postDelayed({ tab_layout.getTabAt(0)?.select() }, 100)
+                            product_id?.run{
+                                apiMenuHermes(this)
+                            }
+                        }else{
+                            pagerMain.currentItem = 1
+                            Handler().postDelayed({ tab_layout.getTabAt(1)?.select() }, 100)
+                            product_id?.run{
+                                apiMenuNvl(this)
+                            }
+                        }
+                    }
+                }
+            }else{
+
+            }
+        }
+    }
+
+    private fun apiMenuNvl(id : String){
+        val callback: ApiRequest<NvlModelData> = ApiRequest()
+        callback.setCallBack(mApiSCM?.apiSCMProducts(1,mCartBussiness.getCartLocate().locateId,1,999),
+                { response ->  onResponseServiceListNvl(response.data,id) }) { error ->
+            error.printStackTrace()
+        }
+    }
+
+    private fun onResponseServiceListNvl(data: ArrayList<NvlModel>?, id: String) {
+        data?.run{
+            forEach {
+                if(it.id == id){
+                    val bundle = Bundle()
+                    bundle.putSerializable(Constants.OBJECT, it)
+                    openActivity(NvlDetailActivity::class.java ,bundle = bundle)
+                }
+            }
+        }
+    }
+
+    private fun apiMenuHermes(id : String){
+        var productType = ""
+        if (mCartBussiness.appType == Constants.FABI) {
+            productType = Constants.FABI
+        } else {
+            productType = Constants.POSPC
+        }
+
+        val callback: ApiRequest<RestAllDmServiceListOrigin> = ApiRequest()
+        callback.setCallBack(mApiHermes?.apiOrderOnline_ServiceList(productType),
+                { response ->  onResponseServiceList(response.data,id) }) { error ->
+        }
+    }
+
+    private fun onResponseServiceList(data: ArrayList<DmServiceListOrigin>?, id : String) {
+        data?.run{
+            forEach {
+                if(it.uId == id){
+                    val bundle = Bundle()
+                    bundle.putSerializable(Constants.OBJECT, it)
+                    openActivity(
+                            PurchaseDetailActivity::class.java ,bundle = bundle
+                    )
+                }
+            }
         }
     }
 

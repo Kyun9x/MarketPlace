@@ -128,12 +128,24 @@ data class NotificationModel(
         @SerializedName("id") var id: String? = null,
         @SerializedName("notify_type") var notify_type: String? = null,
         @SerializedName("notify_link") var notify_link: String? = null,
+        @SerializedName("partner_notify_id") var partner_notify_id: String? = null,
         @SerializedName("notify_image_path") var notify_image_path: String? = null,
         @SerializedName("notify_title_html") var notify_title_html: String? = null,
         @SerializedName("notify_messages_html") var notify_messages_html: String? = null,
         @SerializedName("notify_messages") var notify_messages: String? = null,
         @SerializedName("notify_id") var notify_id: String? = null,
+        @SerializedName("notify_detail") var notify_detail: NotificationDetailModel? = null,
         @SerializedName("notify_title") var notify_title: String? = null
+) : Serializable {
+    fun toJson(): String {
+        return Gson().toJson(this)
+    }
+}
+
+data class NotificationDetailModel(
+        @SerializedName("product_type") var product_type: String? = null,
+        @SerializedName("product_id") var product_id: String? = null,
+        @SerializedName("id") var id: String? = null
 ) : Serializable {
     fun toJson(): String {
         return Gson().toJson(this)

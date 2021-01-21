@@ -10,12 +10,15 @@ import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseActivity
 import com.modul.marketplace.app.ApplicationMarketPlace
 import com.modul.marketplace.app.Constants
+import com.modul.marketplace.app.Constants.NotifyStatus.PRODUCT
+import com.modul.marketplace.app.Constants.NotifyStatus.SCM_ARTICLE
 import com.modul.marketplace.extension.DialogUtil
 import com.modul.marketplace.extension.StringExt
 import com.modul.marketplace.extension.openActivity
 import com.modul.marketplace.extension.showStatusBar
 import com.modul.marketplace.model.marketplace.AddressModel
 import com.modul.marketplace.model.marketplace.AddressModelData
+import com.modul.marketplace.model.marketplace.NotificationModel
 import com.modul.marketplace.restful.ApiRequest
 import com.modul.marketplace.restful.WSRestFull
 import com.modul.marketplace.util.ToastUtil
@@ -39,14 +42,20 @@ class SelectStartAddressActivity : BaseActivity() {
     }
 
     private fun initExtraItem() {
-        val item: String? = intent.getSerializableExtra(Constants.KEY_DATA) as String?
+        val item: NotificationModel? = intent.getSerializableExtra(Constants.KEY_DATA) as NotificationModel?
         item?.run {
 
-            Handler().postDelayed({
-                var bundle = Bundle()
-                bundle.putString(Constants.OBJECT, this)
-                openActivity(ArticleDetailActivity::class.java,bundle)
-            },1000)
+            if(notify_type == SCM_ARTICLE) {
+                Handler().postDelayed({
+                    var bundle = Bundle()
+                    bundle.putString(Constants.OBJECT, partner_notify_id)
+                    openActivity(ArticleDetailActivity::class.java,bundle)
+                },1000)
+            }else if(notify_type == PRODUCT){
+
+            }else{
+
+            }
         }
     }
 
