@@ -59,10 +59,7 @@ class MarketPlaceActivity : BaseActivity() {
         }
 
         item?.run {
-            Timber.e("item: " + toJson())
-            Timber.e("notify_type: " + notify_type)
             if (notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
-                Timber.e("notify_type: " + notify_type)
                 pagerMain.currentItem = 2
                 Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
 
@@ -73,21 +70,17 @@ class MarketPlaceActivity : BaseActivity() {
                 }, 1000)
             } else if (notify_type == Constants.NotifyStatus.PRODUCT) {
                 notify_detail?.run {
-                    Timber.e("notify_detail: " + toJson())
                     product_type?.run {
-                        Timber.e("product_type: " + product_type)
                         if (this == HERMES) {
                             pagerMain.currentItem = 0
                             Handler().postDelayed({ tab_layout.getTabAt(0)?.select() }, 100)
-                            product_id?.run {
-                                Timber.e("product_id: " + this)
+                            id?.run {
                                 apiMenuHermes(this)
                             }
                         } else {
                             pagerMain.currentItem = 1
                             Handler().postDelayed({ tab_layout.getTabAt(1)?.select() }, 100)
-                            product_id?.run {
-                                Timber.e("product_id: " + this)
+                            id?.run {
                                 apiMenuNvl(this)
                             }
                         }
@@ -135,10 +128,8 @@ class MarketPlaceActivity : BaseActivity() {
     }
 
     private fun onResponseServiceList(data: ArrayList<DmServiceListOrigin>?, id: String) {
-        showToast("id: "+ id)
         data?.forEach {
             if (it.uId.equals(id)) {
-                        showToast("Co data: "+ it.name)
                 Handler().postDelayed({
                     val bundle = Bundle()
                     bundle.putSerializable(Constants.OBJECT, it)
