@@ -57,13 +57,7 @@ class MarketPlaceActivity : BaseActivity() {
             }
         }
 
-        var notificationModelnew = NotificationModel()
-
-        item?.run{
-            notificationModelnew = this.copy()
-        }
-
-        initMenu(notificationModelnew)
+        initMenu(item)
 
         item?.run {
             if (notify_type == Constants.NotifyStatus.SCM_ARTICLE) {

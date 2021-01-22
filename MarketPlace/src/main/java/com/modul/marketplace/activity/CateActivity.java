@@ -97,10 +97,10 @@ public class CateActivity extends BaseActivity {
 
 
     protected void displayOrderOnline() {
-        if (fragment == null) {
-            fragment = PurchaseFragment.newInstance();
-        }
-        executeFragmentTransaction(fragment, R.id.content, false, false);
+//        if (fragment == null) {
+//            fragment = PurchaseFragment.newInstance();
+//        }
+//        executeFragmentTransaction(fragment, R.id.content, false, false);
     }
 
     //=====================
