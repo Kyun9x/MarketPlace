@@ -26,6 +26,7 @@ data class ArticlesModel(
         @SerializedName("dateName") var dateName: String? = null,
         @SerializedName("city") var city: ArticlesCityModel? = null,
         @SerializedName("price") var mPrice: Double? = 0.0,
+        @SerializedName("view_count") var view_count: Int? = 0,
         @SerializedName("content") var mContent: String? = null
 ) : Serializable {
 
