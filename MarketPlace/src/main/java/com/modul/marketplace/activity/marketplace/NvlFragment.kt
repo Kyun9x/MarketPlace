@@ -19,17 +19,13 @@ import com.google.gson.Gson
 import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseFragment
 import com.modul.marketplace.activity.CateActivity
+import com.modul.marketplace.activity.order_online.PurchaseDetailActivity
+import com.modul.marketplace.activity.order_online.PurchaseFragment
 import com.modul.marketplace.adapter.orderonline.ServiceListRecyleAdapter
 import com.modul.marketplace.app.Constants
-import com.modul.marketplace.extension.DialogUtil
-import com.modul.marketplace.extension.gone
-import com.modul.marketplace.extension.openActivityForResult
-import com.modul.marketplace.extension.visible
+import com.modul.marketplace.extension.*
 import com.modul.marketplace.holder.orderonline.ServicelistRecycleHolder
-import com.modul.marketplace.model.marketplace.AddressModelData
-import com.modul.marketplace.model.marketplace.NvlModel
-import com.modul.marketplace.model.marketplace.NvlModelData
-import com.modul.marketplace.model.marketplace.TrademarkModel
+import com.modul.marketplace.model.marketplace.*
 import com.modul.marketplace.model.orderonline.DmServiceListOrigin
 import com.modul.marketplace.restful.ApiRequest
 import com.modul.marketplace.restful.WSRestFull
@@ -37,6 +33,7 @@ import com.modul.marketplace.util.Log
 import com.modul.marketplace.util.PaginationListener
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
+import kotlinx.android.synthetic.main.activity_marketplace.*
 import kotlinx.android.synthetic.main.fragment_nvl.*
 import timber.log.Timber
 import java.util.*
@@ -50,6 +47,7 @@ class NvlFragment : BaseFragment() {
     private var currentPage: Int = 1
     private var isLastPage = false
     private val totalPage = 99
+    private var idItemInPush : String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_nvl, container, false)
@@ -67,6 +65,33 @@ class NvlFragment : BaseFragment() {
         isLastPage = false
         initData()
         initClick()
+        initExtraItem()
+    }
+
+    private fun initExtraItem() {
+        var item = mActivity.intent?.extras?.let {
+            if (it.containsKey(Constants.KEY_DATA)) {
+                it.getSerializable(Constants.KEY_DATA) as NotificationModel?
+            } else {
+                null
+            }
+        }
+
+        item?.run {
+            if (notify_type == Constants.NotifyStatus.PRODUCT) {
+                notify_detail?.run {
+                    product_type?.run {
+                        if (this == Constants.Product.HERMES) {
+
+                        }else {
+                            id?.run {
+                                idItemInPush = this
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initClick() {
@@ -188,6 +213,7 @@ class NvlFragment : BaseFragment() {
                     dmServiceListOrigin.trademark = it.trademark
                     mDatas.add(dmServiceListOrigin)
                 }
+                checkPushOpenDetail()
 
                 if (currentPage < totalPage) {
                     mAdapter?.addLoading()
@@ -210,6 +236,21 @@ class NvlFragment : BaseFragment() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun checkPushOpenDetail() {
+        idItemInPush?.run{
+            mDatas.forEach {
+                if (it.productUid.equals(this)) {
+                    Handler().postDelayed({
+                        val bundle = Bundle()
+                        bundle.putSerializable(Constants.OBJECT, it)
+                        openActivity(NvlDetailActivity::class.java, bundle = bundle)
+                    }, 500)
+                }
+            }
+        }
+        idItemInPush = null
     }
 
     private fun checkOrderType(confirm: (() -> Unit)? = null) {
@@ -313,8 +354,12 @@ class NvlFragment : BaseFragment() {
     }
 
     companion object {
-        fun newInstance(): NvlFragment {
-            return NvlFragment()
+        fun newInstance(pushNotify : NotificationModel?): NvlFragment {
+            val args = Bundle()
+            args.putSerializable("pushNotify", pushNotify)
+            var f = NvlFragment()
+            f.arguments = args
+            return f
         }
     }
 }

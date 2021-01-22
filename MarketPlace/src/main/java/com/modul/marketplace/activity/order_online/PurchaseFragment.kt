@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -19,12 +20,14 @@ import com.modul.marketplace.R
 import com.modul.marketplace.activity.BaseFragment
 import com.modul.marketplace.activity.CateActivity
 import com.modul.marketplace.activity.marketplace.ArticleCreateActivity
+import com.modul.marketplace.activity.marketplace.ArticleDetailActivity
 import com.modul.marketplace.adapter.orderonline.ServiceListRecyleAdapter
 import com.modul.marketplace.app.ApplicationMarketPlace
 import com.modul.marketplace.app.Constants
 import com.modul.marketplace.extension.*
 import com.modul.marketplace.holder.orderonline.ServicelistRecycleHolder
 import com.modul.marketplace.model.marketplace.AddressModelData
+import com.modul.marketplace.model.marketplace.NotificationModel
 import com.modul.marketplace.model.orderonline.DmServiceListOrigin
 import com.modul.marketplace.paser.orderonline.RestAllDmServiceListOrigin
 import com.modul.marketplace.restful.ApiRequest
@@ -33,6 +36,7 @@ import com.modul.marketplace.util.Log
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration
+import kotlinx.android.synthetic.main.activity_marketplace.*
 import kotlinx.android.synthetic.main.fragment_nvl.*
 import timber.log.Timber
 import java.util.*
@@ -42,6 +46,7 @@ class PurchaseFragment : BaseFragment() {
     private var mAdapter: ServiceListRecyleAdapter? = null
     private val mDatas = ArrayList<DmServiceListOrigin>()
     private val RC_DETAL_CALLBACK = 261
+    private var idItemInPush : String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_purchase, container, false)
@@ -56,6 +61,31 @@ class PurchaseFragment : BaseFragment() {
         initAdapter()
         initData()
         initClick()
+        initExtraItem()
+    }
+
+    private fun initExtraItem() {
+        var item = mActivity.intent?.extras?.let {
+            if (it.containsKey(Constants.KEY_DATA)) {
+                it.getSerializable(Constants.KEY_DATA) as NotificationModel?
+            } else {
+                null
+            }
+        }
+
+        item?.run {
+            if (notify_type == Constants.NotifyStatus.PRODUCT) {
+                notify_detail?.run {
+                    product_type?.run {
+                        if (this == Constants.Product.HERMES) {
+                            id?.run {
+                                idItemInPush = this
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initClick() {
@@ -182,7 +212,7 @@ class PurchaseFragment : BaseFragment() {
             val sortedList = response.sortedWith(compareBy { it.type })
             mDatas.addAll(sortedList)
         }
-
+        checkPushOpenDetail()
         if (mLoi != null) {
             if (mDatas.size == 0) {
                 mLoi.visible()
@@ -192,6 +222,21 @@ class PurchaseFragment : BaseFragment() {
         }
 
         mAdapter?.notifyDataSetChanged()
+    }
+
+    private fun checkPushOpenDetail(){
+        idItemInPush?.run{
+            mDatas.forEach {
+                if (it.uId.equals(this)) {
+                    Handler().postDelayed({
+                        val bundle = Bundle()
+                        bundle.putSerializable(Constants.OBJECT, it)
+                        openActivity(PurchaseDetailActivity::class.java, bundle = bundle)
+                    }, 500)
+                }
+            }
+        }
+        idItemInPush = null
     }
 
     private fun listDetails() {
@@ -273,8 +318,12 @@ class PurchaseFragment : BaseFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(): PurchaseFragment {
-            return PurchaseFragment()
+        fun newInstance(pushNotify : NotificationModel?): PurchaseFragment {
+            val args = Bundle()
+            args.putSerializable("pushNotify", pushNotify)
+            var f = PurchaseFragment()
+            f.arguments = args
+            return f
         }
     }
 }

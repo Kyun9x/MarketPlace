@@ -23,10 +23,12 @@ import com.modul.marketplace.extension.openActivity
 import com.modul.marketplace.extension.visible
 import com.modul.marketplace.model.marketplace.ArticlesModel
 import com.modul.marketplace.model.marketplace.ArticlesModelData
+import com.modul.marketplace.model.marketplace.NotificationModel
 import com.modul.marketplace.restful.ApiRequest
 import com.modul.marketplace.util.PaginationListener
 import com.modul.marketplace.util.ToastUtil
 import com.modul.marketplace.util.Utilities
+import kotlinx.android.synthetic.main.activity_marketplace.*
 import kotlinx.android.synthetic.main.fragment_article.*
 import timber.log.Timber
 import java.util.*
@@ -56,6 +58,27 @@ class ArticleFragment : BaseFragment() {
         isLastPage = false
         initData()
         initClick()
+        initExtraItem()
+    }
+
+    private fun initExtraItem() {
+        var item = mActivity.intent?.extras?.let {
+            if (it.containsKey(Constants.KEY_DATA)) {
+                it.getSerializable(Constants.KEY_DATA) as NotificationModel?
+            } else {
+                null
+            }
+        }
+
+        item?.run {
+            if (notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
+                Handler().postDelayed({
+                    var bundle = Bundle()
+                    bundle.putString(Constants.OBJECT, partner_notify_id)
+                    openActivity(ArticleDetailActivity::class.java, bundle)
+                }, 500)
+            }
+        }
     }
 
     private fun initClick() {
@@ -168,8 +191,12 @@ class ArticleFragment : BaseFragment() {
     }
 
     companion object {
-        fun newInstance(): ArticleFragment {
-            return ArticleFragment()
+        fun newInstance(pushNotify : NotificationModel?): ArticleFragment {
+            val args = Bundle()
+            args.putSerializable("pushNotify", pushNotify)
+            var f = ArticleFragment()
+            f.arguments = args
+            return f
         }
     }
 }

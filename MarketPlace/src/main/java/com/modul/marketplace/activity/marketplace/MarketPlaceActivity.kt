@@ -43,7 +43,6 @@ class MarketPlaceActivity : BaseActivity() {
         setContentView(R.layout.activity_marketplace)
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(onNotice, IntentFilter(BROAD_MAKETPLACE))
-        initMenu()
         initData()
         initClick()
         initExtraItem()
@@ -52,37 +51,39 @@ class MarketPlaceActivity : BaseActivity() {
     private fun initExtraItem() {
         var item = intent?.extras?.let {
             if (it.containsKey(Constants.KEY_DATA)) {
-                it.getSerializable(Constants.KEY_DATA) as NotificationModel
+                it.getSerializable(Constants.KEY_DATA) as NotificationModel?
             } else {
                 null
             }
         }
+
+        initMenu(item)
 
         item?.run {
             if (notify_type == Constants.NotifyStatus.SCM_ARTICLE) {
                 pagerMain.currentItem = 2
                 Handler().postDelayed({ tab_layout.getTabAt(2)?.select() }, 100)
 
-                Handler().postDelayed({
-                    var bundle = Bundle()
-                    bundle.putString(Constants.OBJECT, partner_notify_id)
-                    openActivity(ArticleDetailActivity::class.java, bundle)
-                }, 1000)
+//                Handler().postDelayed({
+//                    var bundle = Bundle()
+//                    bundle.putString(Constants.OBJECT, partner_notify_id)
+//                    openActivity(ArticleDetailActivity::class.java, bundle)
+//                }, 1000)
             } else if (notify_type == Constants.NotifyStatus.PRODUCT) {
                 notify_detail?.run {
                     product_type?.run {
                         if (this == HERMES) {
                             pagerMain.currentItem = 0
                             Handler().postDelayed({ tab_layout.getTabAt(0)?.select() }, 100)
-                            id?.run {
-                                apiMenuHermes(this)
-                            }
+//                            id?.run {
+//                                apiMenuHermes(this)
+//                            }
                         } else {
                             pagerMain.currentItem = 1
                             Handler().postDelayed({ tab_layout.getTabAt(1)?.select() }, 100)
-                            id?.run {
-                                apiMenuNvl(this)
-                            }
+//                            id?.run {
+//                                apiMenuNvl(this)
+//                            }
                         }
                     }
                 }
@@ -156,9 +157,9 @@ class MarketPlaceActivity : BaseActivity() {
         }
     }
 
-    private fun initMenu() {
+    private fun initMenu(pushNotify : NotificationModel?) {
         let {
-            val pagerAdapter = MarketPlaceAdapter(it)
+            val pagerAdapter = MarketPlaceAdapter(it,pushNotify)
             pagerMain.adapter = pagerAdapter
             pagerMain.offscreenPageLimit = 3
             pagerMain.isUserInputEnabled = false

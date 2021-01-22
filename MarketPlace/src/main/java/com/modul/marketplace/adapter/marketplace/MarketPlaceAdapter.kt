@@ -6,14 +6,15 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.modul.marketplace.activity.marketplace.ArticleFragment
 import com.modul.marketplace.activity.marketplace.NvlFragment
 import com.modul.marketplace.activity.order_online.PurchaseFragment
+import com.modul.marketplace.model.marketplace.NotificationModel
 
-class MarketPlaceAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+class MarketPlaceAdapter(fa: FragmentActivity,pushNotify : NotificationModel?) : FragmentStateAdapter(fa) {
 
     private val roleSale by lazy {
         arrayListOf(
-                PurchaseFragment.newInstance(),
-                NvlFragment.newInstance(),
-                ArticleFragment.newInstance()
+                PurchaseFragment.newInstance(pushNotify),
+                NvlFragment.newInstance(pushNotify),
+                ArticleFragment.newInstance(pushNotify)
         )
     }
 
