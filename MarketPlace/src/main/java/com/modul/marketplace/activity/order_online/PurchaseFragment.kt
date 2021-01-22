@@ -231,7 +231,7 @@ class PurchaseFragment : BaseFragment() {
                     Handler().postDelayed({
                         val bundle = Bundle()
                         bundle.putSerializable(Constants.OBJECT, it)
-                        openActivity(PurchaseDetailActivity::class.java, bundle = bundle)
+                        openActivityForResult(PurchaseDetailActivity::class.java, RC_DETAL_CALLBACK,bundle = bundle)
                     }, 500)
                 }
             }

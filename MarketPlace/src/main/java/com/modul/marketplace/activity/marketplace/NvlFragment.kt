@@ -245,7 +245,7 @@ class NvlFragment : BaseFragment() {
                     Handler().postDelayed({
                         val bundle = Bundle()
                         bundle.putSerializable(Constants.OBJECT, it)
-                        openActivity(NvlDetailActivity::class.java, bundle = bundle)
+                        openActivityForResult(NvlDetailActivity::class.java, RC_DETAL_CALLBACK,bundle = bundle)
                     }, 500)
                 }
             }
