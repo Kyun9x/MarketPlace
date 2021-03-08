@@ -21,6 +21,7 @@ data class DmServiceListOrigin(
         @SerializedName("minChoice") var minChoice: Double = 0.0,
         @SerializedName("maxChoice") var maxChoice: Double = 0.0,
         @SerializedName("quantity") var quantity: Double = 0.0,
+        var baseQuantity: Double = 0.0,
         @SerializedName("trialDay") var trialDay: Int? = 0,
         @SerializedName("isOnline") var isOnline: Int? = 0,
         @SerializedName("_id") var uId: String? = "",

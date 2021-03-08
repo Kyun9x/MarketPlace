@@ -1,6 +1,7 @@
 package com.modul.marketplace.bussiness
 
 import com.google.gson.Gson
+import com.modul.marketplace.activity.marketplace.MarketPlaceActivity
 import com.modul.marketplace.app.ApplicationMarketPlace
 import com.modul.marketplace.app.Constants
 import com.modul.marketplace.extension.StringExt
@@ -87,6 +88,7 @@ class CartBussiness {
 
         orderOnline.details.addAll(mOrderModel.details)
         Log.e("json", "data: " + Gson().toJson(orderOnline))
+        Utilities.sendBoardCounlyLib(ApplicationMarketPlace.context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.DATA_ORDER, Gson().toJson(orderOnline))
         return orderOnline
     }
 
@@ -137,6 +139,8 @@ class CartBussiness {
             nvlOnline.invoice_details.add(nvlModel)
         }
         Log.e("json", "data: " + Gson().toJson(nvlOnline))
+        Utilities.sendBoardCounlyLib(ApplicationMarketPlace.context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.DATA_ORDER, Gson().toJson(nvlOnline))
+
         return nvlOnline
     }
 
@@ -241,7 +245,7 @@ class CartBussiness {
                     mOrderModel.details.add(ConverUtil.convertServiceListToPromotion(dmServiceListOrigin))
                     for (item in details) {
                         item.comboId = dmServiceListOrigin.code + "*" + timestamp
-                        item.quantity = item.quantity * dmServiceListOrigin.quantity
+                        item.quantity = item.baseQuantity * dmServiceListOrigin.quantity
                         mOrderModel.details.add(ConverUtil.convertServiceListToPromotion(item))
                     }
                 }

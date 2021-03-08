@@ -210,6 +210,13 @@ class PurchaseFragment : BaseFragment() {
         mDatas.clear()
         if (response != null) {
             val sortedList = response.sortedWith(compareBy { it.type })
+            sortedList.forEach {
+                it.details?.run{
+                    forEach{ sub ->
+                        sub.baseQuantity = sub.quantity
+                    }
+                }
+            }
             mDatas.addAll(sortedList)
         }
         checkPushOpenDetail()

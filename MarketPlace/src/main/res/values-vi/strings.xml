@@ -322,12 +322,14 @@
     <string name="completed">Đơn hàng của bạn đã được hoàn thành, các sản phẩm phần mềm đã được gia hạn sử dụng, các sản phẩm phần mềm đã được kích hoạt bảo hành</string>
     <string name="canceled">Rất xin lỗi bạn chúng tôi không thể hoàn thành đơn hàng này, toàn bộ số tiền bạn đã thanh toán online(MoMo, ZaloPay...) chúng tôi sẽ hoàn trả lại cho bạn sớm nhất</string>
     <string name="toan_quoc">Toàn quốc</string>
-    <string name="article_companyId_valid">Tài khoản của bạn chưa chưa được active chức năng tạo tin rao vặt, xin vui lòng liên hệ tổng đài 19004766 để được hỗ trợ</string>
-    <string name="card_companyId_valid">Tài khoản của bạn chưa chưa được active chức năng mua hàng, xin vui lòng liên hệ tổng đài 19004766 để được hỗ trợ</string>
+    <string name="article_companyId_valid">Tài khoản của bạn chưa chưa được active chức năng tạo tin rao vặt, xin vui lòng liên hệ tổng đài 19004766 - Nhánh 2 để được hỗ trợ</string>
+    <string name="card_companyId_valid">Tài khoản của bạn chưa chưa được active chức năng mua hàng, xin vui lòng liên hệ tổng đài 19004766 - Nhánh 2 để được hỗ trợ</string>
     <string name="desau">Để sau</string>
     <string name="policy">Tôi đồng ý với thỏa thuận cung cấp và sử dụng dịch vụ trên nền tảng IPOS Marketplace</string>
     <string name="polilcy_valid">Xin vui lòng xem điều khoản chính sách bảo mật và bấm đồng ý trước khi tạo bài viết</string>
     <string name="decs_valid">Chưa nhập mô tả</string>
     <string name="thoa_thuan">Thỏa thuận</string>
+    <string name="valid_email">Chưa nhập email</string>
+    <string name="luot_em">Lượt xem</string>
 
 </resources>

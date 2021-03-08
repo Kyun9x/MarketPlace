@@ -267,6 +267,7 @@ public class Constants {
 
         public static class CounlyComponent {
             public static final String MARKET_PLACE = "MARKET_PLACE";
+            public static final String DATA_ORDER = "DATA_ORDER";
         }
 
         public static class CounlyFeature {
