@@ -12,6 +12,7 @@ import com.modul.marketplace.model.orderonline.*
 import com.modul.marketplace.util.ConverUtil
 import com.modul.marketplace.util.Log
 import com.modul.marketplace.util.Utilities
+import timber.log.Timber
 
 class CartBussiness {
     private var mOrderModel = DmOrderOnline()
@@ -245,7 +246,9 @@ class CartBussiness {
                     mOrderModel.details.add(ConverUtil.convertServiceListToPromotion(dmServiceListOrigin))
                     for (item in details) {
                         item.comboId = dmServiceListOrigin.code + "*" + timestamp
+                        Timber.e("item baseQuantity: " + item.baseQuantity)
                         item.quantity = item.baseQuantity * dmServiceListOrigin.quantity
+                        Timber.e("item quantiy: " + item.quantity)
                         mOrderModel.details.add(ConverUtil.convertServiceListToPromotion(item))
                     }
                 }
