@@ -78,7 +78,7 @@ public class CartRecycleHolder extends AbsRecyleHolder {
 
         mQuantity.setText("SL: " + FormatNumberUtil.fmt(dmService.getQuantity()));
         if (DmServiceListOrigin.TYPE_COMBO.equals(dmService.getServiceType())) {
-            mPrice.setText(FormatNumberUtil.formatCurrency(dmService.getAmountCombo() * dmService.getQuantity()));
+            mPrice.setText(FormatNumberUtil.formatCurrency(dmService.getAmountCombo()));
             mAdress.setText(dmService.getComboDesc());
             mName.setText(dmService.getServiceName());
         } else {

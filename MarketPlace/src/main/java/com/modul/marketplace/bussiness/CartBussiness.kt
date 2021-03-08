@@ -239,9 +239,9 @@ class CartBussiness {
                     dmServiceListOrigin.comboId = dmServiceListOrigin.code + "*" + timestamp
                     details.forEachIndexed { index, item ->
                         comboDesc += if (index < details.size.minus(1)) {
-                            "x" + StringExt.convertNumberToString(item.quantity * dmServiceListOrigin.quantity) + " " + item.name + "\n"
+                            "x" + StringExt.convertNumberToString(item.baseQuantity * dmServiceListOrigin.quantity) + " " + item.name + "\n"
                         } else {
-                            "x" + StringExt.convertNumberToString(item.quantity * dmServiceListOrigin.quantity) + " " + item.name
+                            "x" + StringExt.convertNumberToString(item.baseQuantity * dmServiceListOrigin.quantity) + " " + item.name
                         }
                     }
                     dmServiceListOrigin.comboDesc = comboDesc
@@ -249,7 +249,7 @@ class CartBussiness {
                     for (item in details) {
                         item.comboId = dmServiceListOrigin.code + "*" + timestamp
                         item.quantity = item.baseQuantity * dmServiceListOrigin.quantity
-                        ToastUtil.makeText(ApplicationMarketPlace.context,"item baseQuantity: " + item.baseQuantity)
+                        ToastUtil.makeText(ApplicationMarketPlace.context,"item quantity: " + item.quantity + " |item baseQuantity: " + item.baseQuantity + " |dmServiceListOrigin quantity: " + dmServiceListOrigin.quantity)
                         mOrderModel.details.add(ConverUtil.convertServiceListToPromotion(item))
                     }
                 }
