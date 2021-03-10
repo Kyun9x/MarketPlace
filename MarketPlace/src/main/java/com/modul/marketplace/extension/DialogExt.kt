@@ -137,17 +137,6 @@ object DialogUtil {
                 mQuantity.text = "" + quantity.minus(1)
             }
 
-            if(quantity == 0){
-                mEdit.setText(textDelete)
-                mEdit.setTextAppearance(context,R.style.UnelevatedButtonCancel2)
-//                mDelete.visible()
-//                mEdit.gone()
-            }else{
-                mEdit.setText(textOk)
-                mEdit.setTextAppearance(context,R.style.UnelevatedButton)
-//                mDelete.gone()
-//                mEdit.visible()
-            }
             data.quantity = mQuantity.text.toString().toDouble()
         }
         mPlus.setOnClickListener {
@@ -161,12 +150,6 @@ object DialogUtil {
                 okListener?.let { it1 -> it1(data) }
             }
         }
-//        mDelete.setOnClickListener {
-//            if (dialog.isShowing) {
-//                dialog.dismiss()
-//                okListener?.let { it1 -> it1(data) }
-//            }
-//        }
 
         if (!dialog.isShowing) {
             dialog.show()
