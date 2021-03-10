@@ -477,7 +477,6 @@ public class OrderDetailFragment extends BaseFragment {
                     }
                     dmService.setAmountCombo(amount);
                 }
-
             }
         }
     }

@@ -62,9 +62,9 @@ data class DmServiceListOrigin(
     fun getPrice():Double{
         var price = 0.0
         if(marketPrice != null){
-            price = marketPrice!!.plus(amountCombo!!)
+            price = marketPrice!!
         }else{
-            price = unitPrice.plus(amountCombo!!)
+            price = unitPrice
         }
         return price
     }
