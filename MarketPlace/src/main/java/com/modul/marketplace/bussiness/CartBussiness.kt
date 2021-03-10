@@ -91,7 +91,7 @@ class CartBussiness {
 
         orderOnline.details.addAll(mOrderModel.details)
         Log.e("json", "data: " + Gson().toJson(orderOnline))
-        Utilities.sendBoardCounlyLib(ApplicationMarketPlace.context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.DATA_ORDER, Gson().toJson(orderOnline))
+        Utilities.sendBoardCounlyLib(ApplicationMarketPlace.context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.ORDER, Constants.Countly.CounlyComponent.DATA_ORDER, Gson().toJson(orderOnline))
         return orderOnline
     }
 
@@ -142,7 +142,7 @@ class CartBussiness {
             nvlOnline.invoice_details.add(nvlModel)
         }
         Log.e("json", "data: " + Gson().toJson(nvlOnline))
-        Utilities.sendBoardCounlyLib(ApplicationMarketPlace.context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.DATA_ORDER, Gson().toJson(nvlOnline))
+        Utilities.sendBoardCounlyLib(ApplicationMarketPlace.context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.ORDER, Constants.Countly.CounlyComponent.DATA_ORDER, Gson().toJson(nvlOnline))
 
         return nvlOnline
     }

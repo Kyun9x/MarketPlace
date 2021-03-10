@@ -133,6 +133,9 @@ object DialogUtil {
             var quantity = mQuantity.text.toString().toInt()
             if (quantity > 0) {
                 mQuantity.text = "" + quantity.minus(1)
+                mEdit.setTextAppearance(context, R.style.UnelevatedButton)
+            }else{
+                mEdit.setTextAppearance(context, R.style.UnelevatedButtonCancel2)
             }
             data.quantity = mQuantity.text.toString().toDouble()
         }

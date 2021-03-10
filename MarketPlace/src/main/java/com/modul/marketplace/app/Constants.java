@@ -262,6 +262,7 @@ public class Constants {
     public static class Countly {
         public static class EVENT {
             public static String FEATURE = "FEATURE";
+            public static String ORDER = "ORDER";
             public static String EXCEPTION = "EXCEPTION";
         }
 
