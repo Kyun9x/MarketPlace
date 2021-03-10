@@ -113,7 +113,7 @@
         android:paddingTop="@dimen/d_13"
         android:paddingBottom="@dimen/d_13"
         android:stateListAnimator="@null"
-        android:text="@string/cart_edit"
+        android:text="@string/context_menu_xoa"
         android:textAppearance="@style/TextView.SemiBold"
         android:textSize="@dimen/font_size_14"
         app:layout_constraintBottom_toBottomOf="parent"

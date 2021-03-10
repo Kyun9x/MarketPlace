@@ -156,7 +156,7 @@ object DialogUtil {
                 okListener?.let { it1 -> it1(data) }
             }
         }
-        mDelete.setOnClickListener {
+        mDelete?.setOnClickListener {
             if (dialog.isShowing) {
                 dialog.dismiss()
                 okListener?.let { it1 -> it1(data) }
