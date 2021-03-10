@@ -12,6 +12,7 @@ import com.facebook.drawee.view.SimpleDraweeView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.modul.marketplace.R
+import com.modul.marketplace.app.ApplicationMarketPlace
 import com.modul.marketplace.model.orderonline.DmService
 
 object DialogUtil {
@@ -100,7 +101,6 @@ object DialogUtil {
         context: Context,
         dmService: DmService,
         textOk: Any = context.getString(R.string.cart_edit),
-        textDelete: Any = context.getString(R.string.context_menu_xoa),
         okListener: ((DmService) -> Unit)? = null
     ) {
         val dialog = Dialog(context)
@@ -116,7 +116,7 @@ object DialogUtil {
         val mMinus = dialog.findViewById<ImageView>(R.id.mMinus)
         val mPlus = dialog.findViewById<ImageView>(R.id.mPlus)
         val mEdit = dialog.findViewById<MaterialButton>(R.id.mEdit)
-        val mDelete = dialog.findViewById<MaterialButton>(R.id.mDelete)
+//        val mDelete = dialog.findViewById<MaterialButton>(R.id.mDelete)
 
         var data = DmService(dmService)
         Glide.with(context).load(data.serviceImage).into(mImage)
@@ -130,12 +130,6 @@ object DialogUtil {
             is Int -> context.getString(textOk)
             else -> ""
         }
-        mDelete.text = when (textDelete) {
-            is String -> textDelete
-            is CharSequence -> textDelete
-            is Int -> context.getString(textDelete)
-            else -> ""
-        }
 
         mMinus.setOnClickListener {
             var quantity = mQuantity.text.toString().toInt()
@@ -144,11 +138,15 @@ object DialogUtil {
             }
 
             if(quantity == 0){
-                mDelete.visible()
-                mEdit.gone()
+                mEdit.setText(ApplicationMarketPlace.instance.getString(R.string.context_menu_xoa))
+                mEdit.setTextAppearance(context,R.style.UnelevatedButtonCancel2)
+//                mDelete.visible()
+//                mEdit.gone()
             }else{
-                mDelete.gone()
-                mEdit.visible()
+                mEdit.setText(ApplicationMarketPlace.instance.getString(R.string.cart_edit))
+                mEdit.setTextAppearance(context,R.style.UnelevatedButton)
+//                mDelete.gone()
+//                mEdit.visible()
             }
             data.quantity = mQuantity.text.toString().toDouble()
         }
@@ -163,12 +161,12 @@ object DialogUtil {
                 okListener?.let { it1 -> it1(data) }
             }
         }
-        mDelete.setOnClickListener {
-            if (dialog.isShowing) {
-                dialog.dismiss()
-                okListener?.let { it1 -> it1(data) }
-            }
-        }
+//        mDelete.setOnClickListener {
+//            if (dialog.isShowing) {
+//                dialog.dismiss()
+//                okListener?.let { it1 -> it1(data) }
+//            }
+//        }
 
         if (!dialog.isShowing) {
             dialog.show()

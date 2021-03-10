@@ -99,25 +99,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mQuantity" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mDelete"
-        style="@style/UnelevatedButtonCancel2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginLeft="@dimen/d_15"
-        android:layout_marginTop="@dimen/d_25"
-        android:layout_marginRight="@dimen/d_15"
-        android:layout_marginBottom="@dimen/d_15"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/d_13"
-        android:paddingBottom="@dimen/d_13"
-        android:stateListAnimator="@null"
-        android:text="@string/context_menu_xoa"
-        android:textAppearance="@style/TextView.SemiBold"
-        android:textSize="@dimen/font_size_14"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mQuantity" />
 </androidx.constraintlayout.widget.ConstraintLayout>
