@@ -100,7 +100,8 @@ object DialogUtil {
     fun showAlertEdit(
         context: Context,
         dmService: DmService,
-        textOk: Any = context.getString(R.string.cart_edit),
+        textOk: String = context.getString(R.string.cart_edit),
+        textDelete: String = context.getString(R.string.context_menu_xoa),
         okListener: ((DmService) -> Unit)? = null
     ) {
         val dialog = Dialog(context)
@@ -127,7 +128,6 @@ object DialogUtil {
         mEdit.text = when (textOk) {
             is String -> textOk
             is CharSequence -> textOk
-            is Int -> context.getString(textOk)
             else -> ""
         }
 
@@ -138,12 +138,12 @@ object DialogUtil {
             }
 
             if(quantity == 0){
-                mEdit.setText(ApplicationMarketPlace.instance.getString(R.string.context_menu_xoa))
+                mEdit.setText(textDelete)
                 mEdit.setTextAppearance(context,R.style.UnelevatedButtonCancel2)
 //                mDelete.visible()
 //                mEdit.gone()
             }else{
-                mEdit.setText(ApplicationMarketPlace.instance.getString(R.string.cart_edit))
+                mEdit.setText(textOk)
                 mEdit.setTextAppearance(context,R.style.UnelevatedButton)
 //                mDelete.gone()
 //                mEdit.visible()
