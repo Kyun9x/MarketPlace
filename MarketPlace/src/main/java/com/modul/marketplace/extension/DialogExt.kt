@@ -115,6 +115,7 @@ object DialogUtil {
         val mMinus = dialog.findViewById<ImageView>(R.id.mMinus)
         val mPlus = dialog.findViewById<ImageView>(R.id.mPlus)
         val mEdit = dialog.findViewById<MaterialButton>(R.id.mEdit)
+        val mDelete = dialog.findViewById<MaterialButton>(R.id.mDelete)
 
         var data = DmService(dmService)
         Glide.with(context).load(data.serviceImage).into(mImage)
@@ -133,9 +134,14 @@ object DialogUtil {
             var quantity = mQuantity.text.toString().toInt()
             if (quantity > 0) {
                 mQuantity.text = "" + quantity.minus(1)
-                mEdit.setTextAppearance(context, R.style.UnelevatedButton)
+            }
+
+            if(quantity == 0){
+                mDelete.visible()
+                mEdit.gone()
             }else{
-                mEdit.setTextAppearance(context, R.style.UnelevatedButtonCancel2)
+                mDelete.gone()
+                mEdit.visible()
             }
             data.quantity = mQuantity.text.toString().toDouble()
         }
@@ -145,6 +151,12 @@ object DialogUtil {
             data.quantity = mQuantity.text.toString().toDouble()
         }
         mEdit.setOnClickListener {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+                okListener?.let { it1 -> it1(data) }
+            }
+        }
+        mDelete.setOnClickListener {
             if (dialog.isShowing) {
                 dialog.dismiss()
                 okListener?.let { it1 -> it1(data) }
