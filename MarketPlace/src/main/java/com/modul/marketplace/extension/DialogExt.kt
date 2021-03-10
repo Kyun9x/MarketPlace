@@ -100,6 +100,7 @@ object DialogUtil {
         context: Context,
         dmService: DmService,
         textOk: Any = context.getString(R.string.cart_edit),
+        textDelete: Any = context.getString(R.string.context_menu_xoa),
         okListener: ((DmService) -> Unit)? = null
     ) {
         val dialog = Dialog(context)
@@ -129,6 +130,12 @@ object DialogUtil {
             is Int -> context.getString(textOk)
             else -> ""
         }
+        mDelete.text = when (textDelete) {
+            is String -> textDelete
+            is CharSequence -> textDelete
+            is Int -> context.getString(textDelete)
+            else -> ""
+        }
 
         mMinus.setOnClickListener {
             var quantity = mQuantity.text.toString().toInt()
@@ -156,7 +163,7 @@ object DialogUtil {
                 okListener?.let { it1 -> it1(data) }
             }
         }
-        mDelete?.setOnClickListener {
+        mDelete.setOnClickListener {
             if (dialog.isShowing) {
                 dialog.dismiss()
                 okListener?.let { it1 -> it1(data) }
