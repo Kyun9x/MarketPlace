@@ -249,7 +249,7 @@ class CartBussiness {
                     for (item in details) {
                         item.comboId = dmServiceListOrigin.code + "*" + timestamp
                         item.quantity = item.baseQuantity * dmServiceListOrigin.quantity
-                        ToastUtil.makeText(ApplicationMarketPlace.context,"item quantity: " + item.quantity + " |item baseQuantity: " + item.baseQuantity + " |dmServiceListOrigin quantity: " + dmServiceListOrigin.quantity)
+//                        ToastUtil.makeText(ApplicationMarketPlace.context,"item quantity: " + item.quantity + " |item baseQuantity: " + item.baseQuantity + " |dmServiceListOrigin quantity: " + dmServiceListOrigin.quantity)
                         mOrderModel.details.add(ConverUtil.convertServiceListToPromotion(item))
                     }
                 }
