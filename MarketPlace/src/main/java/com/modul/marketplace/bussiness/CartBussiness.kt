@@ -233,7 +233,7 @@ class CartBussiness {
                     var comboDesc = ""
                     var timestamp = System.currentTimeMillis()
                     for (item in details) {
-                        amount += item.getPrice() * item.quantity
+                        amount += item.getPrice() * item.baseQuantity
                     }
                     dmServiceListOrigin.amountCombo = amount
                     dmServiceListOrigin.comboId = dmServiceListOrigin.code + "*" + timestamp
