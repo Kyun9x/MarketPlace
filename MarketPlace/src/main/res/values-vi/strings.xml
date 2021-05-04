@@ -331,5 +331,6 @@
     <string name="thoa_thuan">Thỏa thuận</string>
     <string name="valid_email">Chưa nhập email</string>
     <string name="luot_em">Lượt xem</string>
+    <string name="check_valid_city">Gặp sự cố chọn địa chỉ, vui lòng chọn lại</string>
 
 </resources>

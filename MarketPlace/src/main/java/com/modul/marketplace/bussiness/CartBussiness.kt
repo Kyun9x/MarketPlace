@@ -1,6 +1,7 @@
 package com.modul.marketplace.bussiness
 
 import com.google.gson.Gson
+import com.modul.marketplace.R
 import com.modul.marketplace.ToastShow
 import com.modul.marketplace.activity.marketplace.MarketPlaceActivity
 import com.modul.marketplace.app.ApplicationMarketPlace
@@ -80,6 +81,12 @@ class CartBussiness {
         orderOnline.storeName = mOrderModel.storeName
         orderOnline.brandId = mOrderModel.brandId
         orderOnline.dmDeliveryInfo = mOrderModel.dmDeliveryInfo
+        orderOnline.dmDeliveryInfo.city = "adb-asdasd-dsadas"
+
+        if(orderOnline.dmDeliveryInfo.city.contains("-")){
+            ToastUtil.makeText(ApplicationMarketPlace.context, ApplicationMarketPlace.context.getString(R.string.check_valid_city))
+            return DmOrderOnline()
+        }
 
         if(appType == Constants.FABI){
             orderOnline.productCode = Constants.FABI
@@ -90,7 +97,7 @@ class CartBussiness {
         }
 
         orderOnline.details.addAll(mOrderModel.details)
-        Log.e("json", "data: " + Gson().toJson(orderOnline))
+//        Log.e("json", "data: " + Gson().toJson(orderOnline))
         Utilities.sendBoardCounlyLib(ApplicationMarketPlace.context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.ORDER, Constants.Countly.CounlyComponent.DATA_ORDER, Gson().toJson(orderOnline))
         return orderOnline
     }
@@ -141,7 +148,7 @@ class CartBussiness {
             var nvlModel = NvlModel(quantity = it.quantity.toInt(), product_uid = it.productUid, description = null, id = null, image_thumb = null, image_urls = null, name = null, price = null, supplier_uid = null, unit = null)
             nvlOnline.invoice_details.add(nvlModel)
         }
-        Log.e("json", "data: " + Gson().toJson(nvlOnline))
+//        Log.e("json", "data: " + Gson().toJson(nvlOnline))
         Utilities.sendBoardCounlyLib(ApplicationMarketPlace.context, Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.ORDER, Constants.Countly.CounlyComponent.DATA_ORDER, Gson().toJson(nvlOnline))
 
         return nvlOnline

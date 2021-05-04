@@ -317,4 +317,6 @@
     <string name="decs_valid">Decs invalid</string>
     <string name="thoa_thuan">Thỏa thuận</string>
     <string name="luot_em">Lượt xem</string>
+    <string name="check_valid_city">Having trouble choosing an address, please choose again</string>
+
 </resources>

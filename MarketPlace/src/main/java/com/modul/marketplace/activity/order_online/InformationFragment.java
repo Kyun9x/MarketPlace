@@ -185,7 +185,7 @@ public class InformationFragment extends BaseFragment {
             }
         });
         btnSuccess.setOnClickListener(v1 -> {
-            Log.e("mCartBussiness.getOrder().getOrderType()", "aaaa : " + mCartBussiness.getOrder().getOrderType());
+//            Log.e("mCartBussiness.getOrder().getOrderType()", "aaaa : " + mCartBussiness.getOrder().getOrderType());
             if (mCartBussiness.getOrder().getInvoice_id() != null) {
                 Intent mIntent = new Intent(getContext(), NvlHistoryDetailActivity.class);
                 Bundle bundle = new Bundle();
@@ -408,7 +408,7 @@ public class InformationFragment extends BaseFragment {
         if (mCartBussiness.getOrder().getOrderType() == Constants.OrderType.OrderOnline) {
             createOrderOnline(mCartBussiness.convertOrderToJson());
             Utilities.sendBoardCounlyLib(getContext(),Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.ORDER_HERMES_PRODUCT);
-        } else {
+        } else if(mCartBussiness.getOrder().getOrderType() == Constants.OrderType.OrderNvl) {
             createOrderNvl(mCartBussiness.convertNvlToJson());
             Utilities.sendBoardCounlyLib(getContext(),Constants.BROADCAST.BROAD_MANAGER_HOME_CALLBACK, Constants.BROADCAST.MARKETPLACE_HERMES_COUNTLY, Constants.Countly.EVENT.FEATURE, Constants.Countly.CounlyComponent.MARKET_PLACE, Constants.Countly.CounlyFeature.ORDER_SCM_PRODUCT);
         }
@@ -469,7 +469,7 @@ public class InformationFragment extends BaseFragment {
 
     private void apiZaloPaymentCreate(DmOrderOnline dmOrderOnline) {
         showProgressHub(mActivity);
-        Log.e("dmOrderOnline", "json: " + new Gson().toJson(dmOrderOnline));
+//        Log.e("dmOrderOnline", "json: " + new Gson().toJson(dmOrderOnline));
 
         ApiRequest<RestDmQRCode> callback = new ApiRequest<>();
         callback.setCallBack(mApiHermes.apiZaloPaymentCreate(dmOrderOnline.getCompanyId(), dmOrderOnline.getStoreId(), dmOrderOnline.getBrandId(), typePayment, dmOrderOnline.getAmount(), dmOrderOnline.getOrderCode(), ""),
