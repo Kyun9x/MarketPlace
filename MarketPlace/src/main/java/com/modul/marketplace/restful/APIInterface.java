@@ -89,7 +89,7 @@ public interface APIInterface {
     Call<LocationModelDataObject> apiSCMLocationCreate(@Body LocationModel json);
 
     @PUT("locations")
-    Call<LocationModelDataObject> apiSCMLocationEdit(@Body String json);
+    Call<LocationModelDataObject> apiSCMLocationEdit(@Body LocationModel json);
 
     @DELETE("locations")
     Call<LocationModelDataObject> apiSCMLocationDelete(@Query("uid") String uid);
