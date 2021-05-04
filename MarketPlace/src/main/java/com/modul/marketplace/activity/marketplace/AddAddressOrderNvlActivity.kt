@@ -304,7 +304,7 @@ class AddAddressOrderNvlActivity : BaseActivity() {
 
     private fun apiEdit(locateModel: LocationModel){
         val callback: ApiRequest<LocationModelDataObject> = ApiRequest()
-        callback.setCallBack(mApiSCM?.apiSCMLocationEdit(locateModel.toJson()),
+        callback.setCallBack(mApiSCM?.apiSCMLocationEdit(locateModel),
                 { response ->  createDone(response.data) }) { error ->
             createDone(null)
             error.printStackTrace()
