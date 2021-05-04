@@ -51,6 +51,8 @@ import java.util.*
 class AddAddressOrderNvlActivity : BaseActivity() {
 
     private var cityCode = ""
+    private var cityFbId = ""
+    private var districtFbId = ""
     private var pricintCode = ""
     private var districtCode = ""
     private var lat = 0.0
@@ -81,8 +83,18 @@ class AddAddressOrderNvlActivity : BaseActivity() {
             city_uid?.run{
                 cityCode = this
             }
+            city?.run{
+                fb_id?.run{
+                    cityFbId = this
+                }
+            }
             district_uid?.run{
                 districtCode = this
+            }
+            district?.run{
+                fb_id?.run{
+                    districtFbId = this
+                }
             }
             precinct_uid?.run{
                 pricintCode = this
@@ -140,7 +152,12 @@ class AddAddressOrderNvlActivity : BaseActivity() {
             popupMenu.setOnMenuItemClickListener { item: MenuItem ->
                 val cityName = item.title.toString()
                 mCity.setText(cityName)
-                cityCode = data[item.itemId.minus(1)].id.toString()
+                data[item.itemId.minus(1)].id?.run{
+                    cityCode = this
+                }
+                data[item.itemId.minus(1)].fb_id?.run{
+                    cityFbId = this
+                }
                 false
             }
             popupMenu.show()
@@ -213,7 +230,12 @@ class AddAddressOrderNvlActivity : BaseActivity() {
             popupMenu.setOnMenuItemClickListener { item: MenuItem ->
                 val cityName = item.title.toString()
                 mDistrict.setText(cityName)
-                districtCode = data[item.itemId.minus(1)].id.toString()
+                data[item.itemId.minus(1)].id?.run{
+                    districtCode = this
+                }
+                data[item.itemId.minus(1)].fb_id?.run{
+                    districtFbId = this
+                }
                 false
             }
             popupMenu.show()
@@ -242,8 +264,8 @@ class AddAddressOrderNvlActivity : BaseActivity() {
 
         val dmDeliveryInfo = DmDeliveryInfo()
         dmDeliveryInfo.address = adressdl
-        dmDeliveryInfo.city = cityCode
-        dmDeliveryInfo.district = districtCode
+        dmDeliveryInfo.city = cityFbId
+        dmDeliveryInfo.district = districtFbId
         dmDeliveryInfo.lat = lat
         dmDeliveryInfo.lng = lng
 

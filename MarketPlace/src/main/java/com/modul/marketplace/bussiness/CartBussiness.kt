@@ -81,9 +81,13 @@ class CartBussiness {
         orderOnline.storeName = mOrderModel.storeName
         orderOnline.brandId = mOrderModel.brandId
         orderOnline.dmDeliveryInfo = mOrderModel.dmDeliveryInfo
-        orderOnline.dmDeliveryInfo.city = "adb-asdasd-dsadas"
 
         if(orderOnline.dmDeliveryInfo.city.contains("-")){
+            ToastUtil.makeText(ApplicationMarketPlace.context, ApplicationMarketPlace.context.getString(R.string.check_valid_city))
+            return DmOrderOnline()
+        }
+
+        if(orderOnline.dmDeliveryInfo.district.contains("-")){
             ToastUtil.makeText(ApplicationMarketPlace.context, ApplicationMarketPlace.context.getString(R.string.check_valid_city))
             return DmOrderOnline()
         }
