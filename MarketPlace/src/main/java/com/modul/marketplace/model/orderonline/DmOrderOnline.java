@@ -62,7 +62,7 @@ public class DmOrderOnline implements Serializable {
     private String productCode = "FABI";
 
     @SerializedName("storeId")
-    private String storeId;
+    private Integer storeId;
 
     @SerializedName("amount")
     private double amount;
@@ -371,11 +371,11 @@ public class DmOrderOnline implements Serializable {
         this.productCode = productCode;
     }
 
-    public String getStoreId() {
+    public Integer getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(String storeId) {
+    public void setStoreId(Integer storeId) {
         this.storeId = storeId;
     }
 

@@ -81,7 +81,7 @@ public class InformationFragment extends BaseFragment {
     private ArrayList<DmBrand> mBrands = new ArrayList<>();
     private ArrayList<DmStore> mStores = new ArrayList<>();
     private String brandId = "";
-    private String storeId = "";
+    private Integer storeId = null;
     private TextInputEditText infoName;
     private TextInputEditText infoPhone;
     private TextInputEditText nameBussiness;
@@ -243,7 +243,7 @@ public class InformationFragment extends BaseFragment {
             if (title.equals(dmBrand.getBrandName())) {
                 brandId = dmBrand.getBrandId();
                 mStore.setText("");
-                storeId = "";
+                storeId = null;
                 mStores.clear();
                 break;
             }
@@ -283,7 +283,9 @@ public class InformationFragment extends BaseFragment {
     private void selectUIdStore(String title) {
         for (DmStore dmStore : mStores) {
             if (title.equals(dmStore.getStoreName())) {
-                storeId = dmStore.getStoreID();
+                if(dmStore.getStoreID() != null){
+                    storeId = Integer.parseInt(dmStore.getStoreID());
+                }
                 break;
             }
         }

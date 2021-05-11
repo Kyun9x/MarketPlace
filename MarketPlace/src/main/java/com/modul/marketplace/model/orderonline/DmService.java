@@ -92,7 +92,7 @@ public class DmService implements Serializable {
 
 
     @SerializedName("storeId")
-    private String storeId;
+    private Integer storeId;
 
     @SerializedName("position")
     private int position;
@@ -247,11 +247,11 @@ public class DmService implements Serializable {
         this.storeName = storeName;
     }
 
-    public String getStoreId() {
+    public Integer getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(String storeId) {
+    public void setStoreId(Integer storeId) {
         this.storeId = storeId;
     }
 

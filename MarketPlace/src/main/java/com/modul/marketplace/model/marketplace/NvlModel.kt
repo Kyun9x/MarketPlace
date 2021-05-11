@@ -138,7 +138,7 @@ data class NvlOnlineModel(
         @SerializedName("location_uid") var location_uid: String? = null,
         @SerializedName("brand_id") var brand_id: String? = null,
         @SerializedName("location") var location: NvlLocateModel? = null,
-        @SerializedName("store_id") var store_id: String? = null,
+        @SerializedName("store_id") var store_id: Int? = null,
         @SerializedName("supplier_uid") var supplier_uid: String? = null,
         @SerializedName("invoice_details") var invoice_details: ArrayList<NvlModel> = ArrayList(),
         var invoice_origin: ArrayList<NvlModel>? = ArrayList(),

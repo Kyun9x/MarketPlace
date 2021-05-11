@@ -60,10 +60,10 @@ public interface APIInterface {
     Call<RestDmOrderOnline> apiOrderOnline(@Body DmOrderOnline json);
 
     @GET("payment/check")
-    Call<RestDmOrderOnline> apiOrderCheckPayment(@Query("companyId") String companyId, @Query("storeId") String storeId, @Query("brandId") String brandId, @Query("paymentMethod") String paymentMethod, @Query("tranId") String tranId);
+    Call<RestDmOrderOnline> apiOrderCheckPayment(@Query("companyId") String companyId, @Query("storeId") Integer storeId, @Query("brandId") String brandId, @Query("paymentMethod") String paymentMethod, @Query("tranId") String tranId);
 
     @GET("payment/createOrder")
-    Call<RestDmQRCode> apiZaloPaymentCreate(@Query("companyId") String companyId, @Query("storeId") String storeId, @Query("brandId") String brandId, @Query("paymentMethod") String paymentMethod, @Query("amount") Double amount, @Query("tranId") String tranId, @Query("desc") String desc);
+    Call<RestDmQRCode> apiZaloPaymentCreate(@Query("companyId") String companyId, @Query("storeId") Integer storeId, @Query("brandId") String brandId, @Query("paymentMethod") String paymentMethod, @Query("amount") Double amount, @Query("tranId") String tranId, @Query("desc") String desc);
 
     @POST("payment/momo/payapp")
     Call<DmCallBackMoMo> apiPaymentMoMo(@Body DmCallBackMoMo json);
